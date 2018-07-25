@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClDownloadCountDao">
+
+
+    <resultMap type="org.loan.core.domain.ClDownloadCountEntity" id="clDownloadCountMap">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="phone" column="phone"/>
+        <result property="equipment" column="equipment"/>
+        <result property="state" column="state"/>
+        <result property="ip" column="ip"/>
+        <result property="ipCity" column="ip_city"/>
+        <result property="url" column="url"/>
+        <result property="createtime" column="createtime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		type, 
+		phone, 
+		equipment, 
+		state, 
+		ip, 
+		ip_city, 
+		url, 
+		createtime
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClDownloadCountEntity" resultMap="clDownloadCountMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_download_count
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClDownloadCountEntity" resultMap="clDownloadCountMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_download_count
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClDownloadCountEntity" resultMap="clDownloadCountMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_download_count
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_download_count
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClDownloadCountEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_download_count
+		(
+			`type`, 
+			`phone`, 
+			`equipment`, 
+			`state`, 
+			`ip`, 
+			`ip_city`, 
+			`url`, 
+			`createtime`
+		)
+		values
+		(
+			#{type}, 
+			#{phone}, 
+			#{equipment}, 
+			#{state}, 
+			#{ip}, 
+			#{ipCity}, 
+			#{url}, 
+			#{createtime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClDownloadCountEntity">
+		update cl_download_count 
+		<set>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="equipment != null">`equipment` = #{equipment}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="ip != null">`ip` = #{ip}, </if>
+			<if test="ipCity != null">`ip_city` = #{ipCity}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="createtime != null">`createtime` = #{createtime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_download_count where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_download_count where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

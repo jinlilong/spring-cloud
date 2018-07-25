@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClProductDao">
+
+
+    <resultMap type="org.loan.core.domain.ClProductEntity" id="clProductMap">
+        <result property="name" column="name"/>
+        <result property="logo" column="logo"/>
+        <result property="desc" column="desc"/>
+        <result property="state" column="state"/>
+        <result property="sort" column="sort"/>
+        <result property="mortgageType" column="mortgage_type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="highCredit" column="high_credit"/>
+        <result property="authDesc" column="auth_desc"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		name, 
+		logo, 
+		mark, 
+		state, 
+		sort, 
+		mortgage_type, 
+		create_time, 
+		modify_time, 
+		high_credit, 
+		auth_desc
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClProductEntity" resultMap="clProductMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_product
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClProductEntity" resultMap="clProductMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_product
+        where state!='0' 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+		order by sort asc
+	</select>
+
+    
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_product
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClProductEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_product
+		(
+			`name`, 
+			`logo`, 
+			`mark`, 
+			`state`, 
+			`sort`, 
+			`mortgage_type`, 
+			`create_time`, 
+			`modify_time`, 
+			`high_credit`, 
+			`auth_desc`
+		)
+		values
+		(
+			#{name}, 
+			#{logo}, 
+			#{mark}, 
+			#{state}, 
+			#{sort}, 
+			#{mortgageType}, 
+			#{createTime}, 
+			#{modifyTime}, 
+			#{highCredit}, 
+			#{authDesc}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClProductEntity">
+		update cl_product 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="logo != null">`logo` = #{logo}, </if>
+			<if test="mark != null">`mark` = #{mark}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="sort != null">`sort` = #{sort}, </if>
+			<if test="mortgageType != null">`mortgage_type` = #{mortgageType}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="highCredit != null">`high_credit` = #{highCredit}, </if>
+			<if test="authDesc != null">`auth_desc` = #{authDesc}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_product where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_product where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

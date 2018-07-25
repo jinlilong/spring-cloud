@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClUserCardCreditLogDao">
+
+
+    <resultMap type="org.loan.core.domain.ClUserCardCreditLogEntity" id="clUserCardCreditLogMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="reqParams" column="req_params"/>
+        <result property="returnParams" column="return_params"/>
+        <result property="imgParams" column="img_params"/>
+        <result property="confidence" column="confidence"/>
+        <result property="result" column="result"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		req_params, 
+		return_params, 
+		img_params, 
+		confidence, 
+		result, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClUserCardCreditLogEntity" resultMap="clUserCardCreditLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_card_credit_log
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClUserCardCreditLogEntity" resultMap="clUserCardCreditLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_card_credit_log
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClUserCardCreditLogEntity" resultMap="clUserCardCreditLogMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_card_credit_log
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_user_card_credit_log
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClUserCardCreditLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_user_card_credit_log
+		(
+			`user_id`, 
+			`req_params`, 
+			`return_params`, 
+			`img_params`, 
+			`confidence`, 
+			`result`, 
+			`create_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{reqParams}, 
+			#{returnParams}, 
+			#{imgParams}, 
+			#{confidence}, 
+			#{result}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClUserCardCreditLogEntity">
+		update cl_user_card_credit_log 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="reqParams != null">`req_params` = #{reqParams}, </if>
+			<if test="returnParams != null">`return_params` = #{returnParams}, </if>
+			<if test="imgParams != null">`img_params` = #{imgParams}, </if>
+			<if test="confidence != null">`confidence` = #{confidence}, </if>
+			<if test="result != null">`result` = #{result}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_user_card_credit_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_user_card_credit_log where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

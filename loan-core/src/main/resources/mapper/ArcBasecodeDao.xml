@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ArcBasecodeDao">
+
+
+    <resultMap type="org.loan.core.domain.ArcBasecodeEntity" id="arcBasecodeMap">
+        <result property="cat" column="cat"/>
+        <result property="code" column="code"/>
+        <result property="descript" column="descript"/>
+        <result property="sys" column="sys"/>
+        <result property="halt" column="halt"/>
+        <result property="grp" column="grp"/>
+        <result property="cby" column="cby"/>
+        <result property="changed" column="changed"/>
+        <result property="seq" column="seq"/>
+        <result property="exts1" column="exts1"/>
+        <result property="exts2" column="exts2"/>
+        <result property="exts3" column="exts3"/>
+        <result property="exts4" column="exts4"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		cat, 
+		code, 
+		descript, 
+		sys, 
+		halt, 
+		grp, 
+		cby, 
+		changed, 
+		seq, 
+		exts1, 
+		exts2, 
+		exts3, 
+		exts4
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ArcBasecodeEntity" resultMap="arcBasecodeMap">
+		select
+		<include refid="Base_Column_List" />
+		from arc_basecode
+		where cat = #{value}
+	</select>
+
+
+	<select id="queryByCode" resultType="org.loan.core.domain.ArcBasecodeEntity" resultMap="arcBasecodeMap">
+		select
+		<include refid="Base_Column_List" />
+		from arc_basecode
+		where code=#{0}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ArcBasecodeEntity" resultMap="arcBasecodeMap">
+		select
+		<include refid="Base_Column_List" />
+		from arc_basecode
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+  
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ArcBasecodeEntity">
+		insert into arc_basecode
+		(
+			`cat`, 
+			`code`, 
+			`descript`, 
+			`sys`, 
+			`halt`, 
+			`grp`, 
+			`cby`, 
+			`changed`, 
+			`seq`, 
+			`exts1`, 
+			`exts2`, 
+			`exts3`, 
+			`exts4`
+		)
+		values
+		(
+			#{cat}, 
+			#{code}, 
+			#{descript}, 
+			#{sys}, 
+			#{halt}, 
+			#{grp}, 
+			#{cby}, 
+			#{changed}, 
+			#{seq}, 
+			#{exts1}, 
+			#{exts2}, 
+			#{exts3}, 
+			#{exts4}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ArcBasecodeEntity">
+		update arc_basecode 
+		<set>
+			<if test="code != null">`code` = #{code}, </if>
+			<if test="descript != null">`descript` = #{descript}, </if>
+			<if test="sys != null">`sys` = #{sys}, </if>
+			<if test="halt != null">`halt` = #{halt}, </if>
+			<if test="grp != null">`grp` = #{grp}, </if>
+			<if test="cby != null">`cby` = #{cby}, </if>
+			<if test="changed != null">`changed` = #{changed}, </if>
+			<if test="seq != null">`seq` = #{seq}, </if>
+			<if test="exts1 != null">`exts1` = #{exts1}, </if>
+			<if test="exts2 != null">`exts2` = #{exts2}, </if>
+			<if test="exts3 != null">`exts3` = #{exts3}, </if>
+			<if test="exts4 != null">`exts4` = #{exts4}</if>
+		</set>
+		where cat = #{cat}
+	</update>
+	
+	<delete id="delete">
+		delete from arc_basecode where cat = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from arc_basecode where cat in 
+		<foreach item="cat" collection="array" open="(" separator="," close=")">
+			#{cat}
+		</foreach>
+	</delete>
+
+</mapper>

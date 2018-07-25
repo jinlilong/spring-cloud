@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpCreditBondDao">
+
+
+    <resultMap type="org.loan.core.domain.SpCreditBondEntity" id="spCreditBondMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="creditId" column="credit_id"/>
+        <result property="bondName" column="bond_name"/>
+        <result property="bondPhone" column="bond_phone"/>
+        <result property="bondIdNo" column="bond_id_no"/>
+        <result property="bondIdIdenImg" column="bond_id_iden_img"/>
+        <result property="bondState" column="bond_state"/>
+        <result property="addTime" column="add_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		credit_id, 
+		bond_name, 
+		bond_phone, 
+		bond_id_no, 
+		bond_id_iden_img, 
+		bond_state, 
+		add_time, 
+		update_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpCreditBondEntity" resultMap="spCreditBondMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_credit_bond
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpCreditBondEntity" resultMap="spCreditBondMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_credit_bond
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpCreditBondEntity" resultMap="spCreditBondMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_credit_bond
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_credit_bond
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpCreditBondEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_credit_bond
+		(
+			`user_id`, 
+			`credit_id`, 
+			`bond_name`, 
+			`bond_phone`, 
+			`bond_id_no`, 
+			`bond_id_iden_img`, 
+			`bond_state`, 
+			`add_time`, 
+			`update_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{creditId}, 
+			#{bondName}, 
+			#{bondPhone}, 
+			#{bondIdNo}, 
+			#{bondIdIdenImg}, 
+			#{bondState}, 
+			#{addTime}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpCreditBondEntity">
+		update sp_credit_bond 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="creditId != null">`credit_id` = #{creditId}, </if>
+			<if test="bondName != null">`bond_name` = #{bondName}, </if>
+			<if test="bondPhone != null">`bond_phone` = #{bondPhone}, </if>
+			<if test="bondIdNo != null">`bond_id_no` = #{bondIdNo}, </if>
+			<if test="bondIdIdenImg != null">`bond_id_iden_img` = #{bondIdIdenImg}, </if>
+			<if test="bondState != null">`bond_state` = #{bondState}, </if>
+			<if test="addTime != null">`add_time` = #{addTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_credit_bond where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_credit_bond where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

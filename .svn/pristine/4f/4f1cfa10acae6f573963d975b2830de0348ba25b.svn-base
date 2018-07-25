@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClUserAuthDao">
+
+
+    <resultMap type="org.loan.core.domain.ClUserAuthEntity" id="clUserAuthMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="idState" column="id_state"/>
+        <result property="phoneState" column="phone_state"/>
+        <result property="contactState" column="contact_state"/>
+        <result property="bankCardState" column="bank_card_state"/>
+        <result property="workInfoState" column="work_info_state"/>
+        <result property="otherInfoState" column="other_info_state"/>
+        <result property="creditState" column="credit_state"/>
+        <result property="securityState" column="security_state"/>
+        <result property="accumulationState" column="accumulation_state"/>
+        <result property="creditMailState" column="credit_mail_state"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		id_state, 
+		phone_state, 
+		contact_state, 
+		bank_card_state, 
+		work_info_state, 
+		other_info_state, 
+		credit_state, 
+		security_state, 
+		accumulation_state, 
+		credit_mail_state
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClUserAuthEntity" resultMap="clUserAuthMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_auth
+		where id = #{value}
+	</select>
+	
+	
+	<select id="queryByUserId" resultType="org.loan.core.domain.ClUserAuthEntity" resultMap="clUserAuthMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_auth
+		where user_id=#{0}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClUserAuthEntity" resultMap="clUserAuthMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_auth
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+   
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClUserAuthEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_user_auth
+		(
+			`user_id`, 
+			`id_state`, 
+			`phone_state`, 
+			`contact_state`, 
+			`bank_card_state`, 
+			`work_info_state`, 
+			`other_info_state`, 
+			`credit_state`, 
+			`security_state`, 
+			`accumulation_state`, 
+			`credit_mail_state`
+		)
+		values
+		(
+			#{userId}, 
+			#{idState}, 
+			#{phoneState}, 
+			#{contactState}, 
+			#{bankCardState}, 
+			#{workInfoState}, 
+			#{otherInfoState}, 
+			#{creditState}, 
+			#{securityState}, 
+			#{accumulationState}, 
+			#{creditMailState}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClUserAuthEntity">
+		update cl_user_auth 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="idState != null">`id_state` = #{idState}, </if>
+			<if test="phoneState != null">`phone_state` = #{phoneState}, </if>
+			<if test="contactState != null">`contact_state` = #{contactState}, </if>
+			<if test="bankCardState != null">`bank_card_state` = #{bankCardState}, </if>
+			<if test="workInfoState != null">`work_info_state` = #{workInfoState}, </if>
+			<if test="otherInfoState != null">`other_info_state` = #{otherInfoState}, </if>
+			<if test="creditState != null">`credit_state` = #{creditState}, </if>
+			<if test="securityState != null">`security_state` = #{securityState}, </if>
+			<if test="accumulationState != null">`accumulation_state` = #{accumulationState}, </if>
+			<if test="creditMailState != null">`credit_mail_state` = #{creditMailState}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_user_auth where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_user_auth where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

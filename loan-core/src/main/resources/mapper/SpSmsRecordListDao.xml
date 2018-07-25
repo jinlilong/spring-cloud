@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpSmsRecordListDao">
+
+
+    <resultMap type="org.loan.core.domain.SpSmsRecordListEntity" id="spSmsRecordListMap">
+        <result property="id" column="id"/>
+        <result property="phone" column="phone"/>
+        <result property="recordId" column="record_id"/>
+        <result property="content" column="content"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		phone, 
+		record_id, 
+		content, 
+		state, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpSmsRecordListEntity" resultMap="spSmsRecordListMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sms_record_list
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpSmsRecordListEntity" resultMap="spSmsRecordListMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sms_record_list
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpSmsRecordListEntity" resultMap="spSmsRecordListMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_sms_record_list
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_sms_record_list
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpSmsRecordListEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_sms_record_list
+		(
+			`phone`, 
+			`record_id`, 
+			`content`, 
+			`state`, 
+			`create_time`
+		)
+		values
+		(
+			#{phone}, 
+			#{recordId}, 
+			#{content}, 
+			#{state}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpSmsRecordListEntity">
+		update sp_sms_record_list 
+		<set>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="recordId != null">`record_id` = #{recordId}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+	<update id="updateByTaskIdAndPhone" parameterType="java.util.Map">
+		update sp_sms_record_list set state=#{state}
+		where phone=#{phone} and record_id=(select id from sp_sms_record where task_id=#{recordId})
+	</update>
+	
+	<delete id="delete">
+		delete from sp_sms_record_list where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_sms_record_list where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

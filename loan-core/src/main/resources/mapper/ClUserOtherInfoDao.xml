@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClUserOtherInfoDao">
+
+
+    <resultMap type="org.loan.core.domain.ClUserOtherInfoEntity" id="clUserOtherInfoMap">
+        <result property="id" column="id"/>
+        <result property="accnt" column="accnt"/>
+        <result property="unionid" column="unionid"/>
+        <result property="userId" column="user_id"/>
+        <result property="cat" column="cat"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		accnt, 
+		unionid, 
+		user_id, 
+		cat, 
+		update_time, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClUserOtherInfoEntity" resultMap="clUserOtherInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_other_info
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClUserOtherInfoEntity" resultMap="clUserOtherInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_other_info
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClUserOtherInfoEntity" resultMap="clUserOtherInfoMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_other_info
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_user_other_info
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClUserOtherInfoEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_user_other_info
+		(
+			`accnt`, 
+			`unionid`, 
+			`user_id`, 
+			`cat`, 
+			`update_time`, 
+			`create_time`
+		)
+		values
+		(
+			#{accnt}, 
+			#{unionid}, 
+			#{userId}, 
+			#{cat}, 
+			#{updateTime}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClUserOtherInfoEntity">
+		update cl_user_other_info 
+		<set>
+			<if test="accnt != null">`accnt` = #{accnt}, </if>
+			<if test="unionid != null">`unionid` = #{unionid}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="cat != null">`cat` = #{cat}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_user_other_info where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_user_other_info where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

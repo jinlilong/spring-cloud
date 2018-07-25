@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ArcConfigDao">
+
+
+    <resultMap type="org.loan.core.domain.ArcConfigEntity" id="arcConfigMap">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <result property="value" column="value"/>
+        <result property="seq" column="seq"/>
+        <result property="state" column="state"/>
+        <result property="remark" column="remark"/>
+        <result property="creator" column="creator"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		type, 
+		name, 
+		code, 
+		value, 
+		seq, 
+		state, 
+		remark, 
+		creator
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ArcConfigEntity" resultMap="arcConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from arc_sys_config
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ArcConfigEntity" resultMap="arcConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from arc_sys_config
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ArcConfigEntity" resultMap="arcConfigMap">
+        select
+        <include refid="Base_Column_List" />
+        from arc_sys_config
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from arc_sys_config
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ArcConfigEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into arc_sys_config
+		(
+			`type`, 
+			`name`, 
+			`code`, 
+			`value`, 
+			`seq`, 
+			`state`, 
+			`remark`, 
+			`creator`
+		)
+		values
+		(
+			#{type}, 
+			#{name}, 
+			#{code}, 
+			#{value}, 
+			#{seq}, 
+			#{state}, 
+			#{remark}, 
+			#{creator}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ArcConfigEntity">
+		update arc_sys_config 
+		<set>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="code != null">`code` = #{code}, </if>
+			<if test="value != null">`value` = #{value}, </if>
+			<if test="seq != null">`seq` = #{seq}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="creator != null">`creator` = #{creator}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from arc_sys_config where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from arc_sys_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

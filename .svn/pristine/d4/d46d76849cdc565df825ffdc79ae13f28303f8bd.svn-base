@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpCreditDao">
+
+
+    <resultMap type="org.loan.core.domain.SpCreditEntity" id="spCreditMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="contractNum" column="contract_num"/>
+        <result property="villageId" column="village_id"/>
+        <result property="addId" column="add_id"/>
+        <result property="credit" column="credit"/>
+        <result property="rate" column="rate"/>
+        <result property="declareTimeStart" column="declare_time_start"/>
+        <result property="serviceType" column="service_type"/>
+        <result property="serviceVariety" column="service_variety"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="startTime" column="start_time"/>
+        <result property="addTime" column="add_time"/>
+        <result property="xlz" column="xlz"/>
+        <result property="declareTimeEnd" column="declare_time_end"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="provinceCode" column="province_code"/>
+        <result property="cityCode" column="city_code"/>
+        <result property="countryCode" column="country_code"/>
+        <result property="title" column="title"/>
+        <result property="editState" column="edit_state"/>
+        <result property="addName" column="add_name"/>
+        <result property="organName" column="organ_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="areaName" column="area_name"/>
+        <result property="cityName" column="city_name"/>
+        <result property="countyName" column="county_name"/>
+        <result property="address" column="address"/>
+        <result property="postalCode" column="postal_code"/>
+        <result property="faxNo" column="fax_no"/>
+        <result property="spouseName" column="spouse_name"/>
+        <result property="spouseNo" column="spouse_no"/>
+        <result property="buyTime" column="buy_time"/>
+        <result property="uploadContract" column="upload_contract"/>
+        <result property="isCredentials" column="is_credentials"/>
+        <result property="advanceState" column="advance_state"/>
+        <result property="singleLoan" column="single_loan"/>
+        <result property="mortgageType" column="mortgage_type"/>
+        <result property="advancePay" column="advance_pay"/>
+        <result property="advanceRate" column="advance_rate"/>
+        <result property="isSign" column="is_sign"/>
+        <result property="months" column="months"/>
+        <result property="monthRate" column="month_rate"/>
+		<result property="maritalStatus" column="marital_status"/>
+		<result property="sourceChannel" column="source_channel"/>
+		<result property="serviceRate" column="service_rate"/>
+        <result property="proceduresRate" column="procedures_rate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		contract_num, 
+		village_id, 
+		add_id, 
+		credit, 
+		rate, 
+		declare_time_start, 
+		service_type, 
+		service_variety, 
+		update_time, 
+		status, 
+		start_time, 
+		add_time, 
+		xlz, 
+		declare_time_end, 
+		organ_code, 
+		province_code, 
+		city_code, 
+		country_code, 
+		title, 
+		edit_state, 
+		add_name, 
+		organ_name, 
+		user_name, 
+		area_name, 
+		city_name, 
+		county_name, 
+		address, 
+		postal_code, 
+		fax_no, 
+		spouse_name, 
+		spouse_no, 
+		buy_time, 
+		upload_contract, 
+		is_credentials, 
+		advance_state,
+		single_loan, 
+		mortgage_type, 
+		advance_pay, 
+		advance_rate, 
+		is_sign, 
+		months, 
+		month_rate,
+		marital_status,
+		source_channel,
+		service_rate, 
+		procedures_rate
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpCreditEntity" resultMap="spCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_credit
+		where id = #{value}
+	</select>
+
+
+	<select id="querySpCreditByClUserId" resultType="org.loan.core.domain.SpCreditEntity" resultMap="spCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_credit
+		where user_id in (select id from sp_user where cl_user_id=#{0})
+	</select>
+
+
+	<select id="querySpCreditByPhone" resultType="org.loan.core.domain.SpCreditEntity" resultMap="spCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_credit
+		where user_id in (select id from sp_user where phone=#{0})
+	</select>
+
+
+	<select id="queryList" resultType="org.loan.core.domain.SpCreditEntity" resultMap="spCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_credit
+        
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpCreditEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_credit
+		(
+			`user_id`, 
+			`contract_num`, 
+			`village_id`, 
+			`add_id`, 
+			`credit`, 
+			`rate`, 
+			`declare_time_start`, 
+			`service_type`, 
+			`service_variety`, 
+			`update_time`, 
+			`status`, 
+			`start_time`, 
+			`add_time`, 
+			`xlz`, 
+			`declare_time_end`, 
+			`organ_code`, 
+			`province_code`, 
+			`city_code`, 
+			`country_code`, 
+			`title`, 
+			`edit_state`, 
+			`add_name`, 
+			`organ_name`, 
+			`user_name`, 
+			`area_name`, 
+			`city_name`, 
+			`county_name`, 
+			`address`, 
+			`postal_code`, 
+			`fax_no`, 
+			`spouse_name`, 
+			`spouse_no`, 
+			`buy_time`, 
+			`upload_contract`, 
+			`is_credentials`, 
+			`advance_state`
+		)
+		values
+		(
+			#{userId}, 
+			#{contractNum}, 
+			#{villageId}, 
+			#{addId}, 
+			#{credit}, 
+			#{rate}, 
+			#{declareTimeStart}, 
+			#{serviceType}, 
+			#{serviceVariety}, 
+			#{updateTime}, 
+			#{status}, 
+			#{startTime}, 
+			#{addTime}, 
+			#{xlz}, 
+			#{declareTimeEnd}, 
+			#{organCode}, 
+			#{provinceCode}, 
+			#{cityCode}, 
+			#{countryCode}, 
+			#{title}, 
+			#{editState}, 
+			#{addName}, 
+			#{organName}, 
+			#{userName}, 
+			#{areaName}, 
+			#{cityName}, 
+			#{countyName}, 
+			#{address}, 
+			#{postalCode}, 
+			#{faxNo}, 
+			#{spouseName}, 
+			#{spouseNo}, 
+			#{buyTime}, 
+			#{uploadContract}, 
+			#{isCredentials}, 
+			#{advanceState}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpCreditEntity">
+		update sp_credit 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="contractNum != null">`contract_num` = #{contractNum}, </if>
+			<if test="villageId != null">`village_id` = #{villageId}, </if>
+			<if test="addId != null">`add_id` = #{addId}, </if>
+			<if test="credit != null">`credit` = #{credit}, </if>
+			<if test="rate != null">`rate` = #{rate}, </if>
+			<if test="declareTimeStart != null">`declare_time_start` = #{declareTimeStart}, </if>
+			<if test="serviceType != null">`service_type` = #{serviceType}, </if>
+			<if test="serviceVariety != null">`service_variety` = #{serviceVariety}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="addTime != null">`add_time` = #{addTime}, </if>
+			<if test="xlz != null">`xlz` = #{xlz}, </if>
+			<if test="declareTimeEnd != null">`declare_time_end` = #{declareTimeEnd}, </if>
+			<if test="organCode != null">`organ_code` = #{organCode}, </if>
+			<if test="provinceCode != null">`province_code` = #{provinceCode}, </if>
+			<if test="cityCode != null">`city_code` = #{cityCode}, </if>
+			<if test="countryCode != null">`country_code` = #{countryCode}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="editState != null">`edit_state` = #{editState}, </if>
+			<if test="addName != null">`add_name` = #{addName}, </if>
+			<if test="organName != null">`organ_name` = #{organName}, </if>
+			<if test="userName != null">`user_name` = #{userName}, </if>
+			<if test="areaName != null">`area_name` = #{areaName}, </if>
+			<if test="cityName != null">`city_name` = #{cityName}, </if>
+			<if test="countyName != null">`county_name` = #{countyName}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="postalCode != null">`postal_code` = #{postalCode}, </if>
+			<if test="faxNo != null">`fax_no` = #{faxNo}, </if>
+			<if test="spouseName != null">`spouse_name` = #{spouseName}, </if>
+			<if test="spouseNo != null">`spouse_no` = #{spouseNo}, </if>
+			<if test="buyTime != null">`buy_time` = #{buyTime}, </if>
+			<if test="uploadContract != null">`upload_contract` = #{uploadContract}, </if>
+			<if test="isCredentials != null">`is_credentials` = #{isCredentials}, </if>
+			<if test="advanceState != null">`advance_state` = #{advanceState}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_credit where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_credit where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

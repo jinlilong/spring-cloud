@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.QrtzSimpleTriggersDao">
+
+
+    <resultMap type="org.loan.core.domain.QrtzSimpleTriggersEntity" id="qrtzSimpleTriggersMap">
+        <result property="schedName" column="SCHED_NAME"/>
+        <result property="triggerName" column="TRIGGER_NAME"/>
+        <result property="triggerGroup" column="TRIGGER_GROUP"/>
+        <result property="repeatCount" column="REPEAT_COUNT"/>
+        <result property="repeatInterval" column="REPEAT_INTERVAL"/>
+        <result property="timesTriggered" column="TIMES_TRIGGERED"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		SCHED_NAME, 
+		TRIGGER_NAME, 
+		TRIGGER_GROUP, 
+		REPEAT_COUNT, 
+		REPEAT_INTERVAL, 
+		TIMES_TRIGGERED
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.QrtzSimpleTriggersEntity" resultMap="qrtzSimpleTriggersMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_simple_triggers
+		where SCHED_NAME = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.QrtzSimpleTriggersEntity" resultMap="qrtzSimpleTriggersMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_simple_triggers
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by SCHED_NAME desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.QrtzSimpleTriggersEntity" resultMap="qrtzSimpleTriggersMap">
+        select
+        <include refid="Base_Column_List" />
+        from qrtz_simple_triggers
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from qrtz_simple_triggers
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.QrtzSimpleTriggersEntity">
+		insert into qrtz_simple_triggers
+		(
+			`SCHED_NAME`, 
+			`TRIGGER_NAME`, 
+			`TRIGGER_GROUP`, 
+			`REPEAT_COUNT`, 
+			`REPEAT_INTERVAL`, 
+			`TIMES_TRIGGERED`
+		)
+		values
+		(
+			#{schedName}, 
+			#{triggerName}, 
+			#{triggerGroup}, 
+			#{repeatCount}, 
+			#{repeatInterval}, 
+			#{timesTriggered}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.QrtzSimpleTriggersEntity">
+		update qrtz_simple_triggers 
+		<set>
+			<if test="triggerName != null">`TRIGGER_NAME` = #{triggerName}, </if>
+			<if test="triggerGroup != null">`TRIGGER_GROUP` = #{triggerGroup}, </if>
+			<if test="repeatCount != null">`REPEAT_COUNT` = #{repeatCount}, </if>
+			<if test="repeatInterval != null">`REPEAT_INTERVAL` = #{repeatInterval}, </if>
+			<if test="timesTriggered != null">`TIMES_TRIGGERED` = #{timesTriggered}</if>
+		</set>
+		where SCHED_NAME = #{schedName}
+	</update>
+	
+	<delete id="delete">
+		delete from qrtz_simple_triggers where SCHED_NAME = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from qrtz_simple_triggers where SCHED_NAME in 
+		<foreach item="schedName" collection="array" open="(" separator="," close=")">
+			#{schedName}
+		</foreach>
+	</delete>
+
+</mapper>

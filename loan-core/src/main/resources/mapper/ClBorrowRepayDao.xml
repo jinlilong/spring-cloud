@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClBorrowRepayDao">
+
+
+    <resultMap type="org.loan.core.domain.ClBorrowRepayEntity" id="clBorrowRepayMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="borrowId" column="borrow_id"/>
+        <result property="realAmount" column="real_amount"/>
+        <result property="interest" column="interest"/>
+        <result property="seq" column="seq"/>
+        <result property="rate" column="rate"/>
+        <result property="amount" column="amount"/>
+        <result property="realAmountBalance" column="real_amount_balance"/>
+        <result property="repayAmount" column="repay_amount"/>
+        <result property="repayTime" column="repay_time"/>
+        <result property="state" column="state"/>
+        <result property="penaltyAmout" column="penalty_amout"/>
+        <result property="penaltyDay" column="penalty_day"/>
+        <result property="createTime" column="create_time"/>
+        <result property="isnotityUser" column="isNotity_user"/>
+        <result property="overdueTime" column="overdue_time"/>
+        <result property="overdue" column="overdue"/>
+        <result property="sourceInterest" column="source_interest"/>
+        <result property="advanceAmount" column="advance_amount"/>
+        <result property="offlineRepaymentVoucherPic" column="offline_repayment_voucher_pic"/>
+        <result property="offlineRepaymentRemark" column="offline_repayment_remark"/>
+        <result property="preState" column="pre_state"/>
+        <result property="repayInterest" column="repay_interest"/>
+        <result property="serviceAmoumt" column="service_amoumt"/>
+        <result property="proceduresAmount" column="procedures_amount"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		borrow_id, 
+		real_amount, 
+		interest, 
+		seq, 
+		rate, 
+		amount, 
+		real_amount_balance, 
+		repay_amount, 
+		repay_time, 
+		state, 
+		penalty_amout, 
+		penalty_day, 
+		create_time, 
+		isNotity_user, 
+		overdue_time, 
+		overdue, 
+		source_interest,
+		advance_amount, 
+		offline_repayment_voucher_pic, 
+		offline_repayment_remark, 
+		pre_state,
+		repay_interest,
+		service_amoumt, 
+		procedures_amount
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClBorrowRepayEntity" resultMap="clBorrowRepayMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		where id = #{value}
+	</select>
+
+	<!-- 查询还款成功的记录条数 -->
+	<select id="countHasRepay" resultType="int">
+		select count(id) from cl_borrow_repay where borrow_id=#{0} and state='10'
+	</select>
+
+	
+	<select id="queryCurrentRepay" resultType="org.loan.core.domain.ClBorrowRepayEntity" resultMap="clBorrowRepayMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		where borrow_id=#{0} and state!='10' order by seq asc limit 1
+	</select>
+	
+	<!-- 更新未还款为已还款 -->
+	<update id="updateAllBorrowRepayHasRepay">
+		update cl_borrow_repay set state='10',service_amoumt=0 where borrow_id=#{0} and state!='10'
+	</update>
+
+	<!-- 计算已还款的本金之和 -->
+	<select id="sumHasRepayRealAmount" resultType="java.math.BigDecimal">
+		select sum(real_amount) from cl_borrow_repay where borrow_id=#{0} and state='10'
+	</select>
+	
+	
+	<!-- 根据borrowId查询是否有已逾期未还款的记录 -->
+	<select id="queryOverdueRepayByBorrowId"  resultType="org.loan.core.domain.ClBorrowRepayEntity" resultMap="clBorrowRepayMap">
+		select 
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		where borrow_id=#{0} and overdue=1 and state!='10' limit 1
+	</select>
+	
+	<!-- 根据userId查询是否有已逾期未还款的记录 -->
+	<select id="queryOverdueRepayByUserId"  resultType="org.loan.core.domain.ClBorrowRepayEntity" resultMap="clBorrowRepayMap">
+		select 
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		where user_id=#{0} and overdue=1 and state!='10' limit 1
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClBorrowRepayEntity" resultMap="clBorrowRepayMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClBorrowRepayEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_borrow_repay
+		(
+			`user_id`, 
+			`borrow_id`, 
+			`real_amount`, 
+			`interest`, 
+			`seq`, 
+			`rate`, 
+			`amount`, 
+			`real_amount_balance`, 
+			`repay_amount`, 
+			`repay_time`, 
+			`state`, 
+			`penalty_amout`, 
+			`penalty_day`, 
+			`create_time`, 
+			`isNotity_user`, 
+			`overdue_time`, 
+			`overdue`, 
+			`source_interest`,
+			`advance_amount`, 
+			`offline_repayment_voucher_pic`, 
+			`offline_repayment_remark`, 
+			`pre_state`,
+			`repay_interest`,
+			`service_amoumt`, 
+			`procedures_amount`
+		)
+		values
+		(
+			#{userId}, 
+			#{borrowId}, 
+			#{realAmount}, 
+			#{interest}, 
+			#{seq}, 
+			#{rate}, 
+			#{amount}, 
+			#{realAmountBalance}, 
+			#{repayAmount}, 
+			#{repayTime}, 
+			#{state}, 
+			#{penaltyAmout}, 
+			#{penaltyDay}, 
+			#{createTime}, 
+			#{isnotityUser}, 
+			#{overdueTime}, 
+			#{overdue}, 
+			#{sourceInterest},
+			#{advanceAmount}, 
+			#{offlineRepaymentVoucherPic}, 
+			#{offlineRepaymentRemark}, 
+			#{preState},
+			#{repayInterest},
+			#{serviceAmoumt}, 
+			#{proceduresAmount}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClBorrowRepayEntity">
+		update cl_borrow_repay 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="borrowId != null">`borrow_id` = #{borrowId}, </if>
+			<if test="realAmount != null">`real_amount` = #{realAmount}, </if>
+			<if test="interest != null">`interest` = #{interest}, </if>
+			<if test="seq != null">`seq` = #{seq}, </if>
+			<if test="rate != null">`rate` = #{rate}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
+			<if test="realAmountBalance != null">`real_amount_balance` = #{realAmountBalance}, </if>
+			<if test="repayAmount != null">`repay_amount` = #{repayAmount}, </if>
+			<if test="repayTime != null">`repay_time` = #{repayTime}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="penaltyAmout != null">`penalty_amout` = #{penaltyAmout}, </if>
+			<if test="penaltyDay != null">`penalty_day` = #{penaltyDay}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="isnotityUser != null">`isNotity_user` = #{isnotityUser}, </if>
+			<if test="overdueTime != null">`overdue_time` = #{overdueTime}, </if>
+			<if test="overdue != null">`overdue` = #{overdue}, </if>
+			<if test="sourceInterest != null">`source_interest` = #{sourceInterest},</if>
+			<if test="advanceAmount != null">`advance_amount` = #{advanceAmount}, </if>
+			<if test="offlineRepaymentVoucherPic != null">`offline_repayment_voucher_pic` = #{offlineRepaymentVoucherPic}, </if>
+			<if test="offlineRepaymentRemark != null">`offline_repayment_remark` = #{offlineRepaymentRemark}, </if>
+			<if test="preState != null">`pre_state` = #{preState},</if>
+			<if test="repayInterest!= null">`repay_interest`=#{repayInterest},</if>
+			<if test="serviceAmoumt != null">`service_amoumt` = #{serviceAmoumt}, </if>
+			<if test="proceduresAmount != null">`procedures_amount` = #{proceduresAmount}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_borrow_repay where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_borrow_repay where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryByUserId" resultType="java.lang.String">
+		SELECT id FROM cl_borrow_repay WHERE user_id=#{userId} LIMIT 0,1
+	</select>
+	
+	
+	<select id="queryFirstPeriodsRepay" resultMap="clBorrowRepayMap">
+		select 
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		where borrow_id=#{0} and seq=1;
+	</select>
+	
+	
+	<select id="queryLatestUnRepay" resultMap="clBorrowRepayMap">
+		select 
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		where borrow_id=#{0} and state!='10' order by seq asc limit 1
+	</select>
+	
+	
+	<select id="queryUserUnRepay" resultMap="clBorrowRepayMap">
+		select 
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		where user_id=#{0} and state!='10'  limit 1
+	
+	</select>
+	
+	<select id="queryBorrowRepayByBorrowId" resultMap="clBorrowRepayMap">
+		select 
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay
+		where borrow_id=#{0} order by seq asc
+	</select>
+	
+</mapper>

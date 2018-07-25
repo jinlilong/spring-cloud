@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClOverdueFineLogDao">
+
+
+    <resultMap type="org.loan.core.domain.ClOverdueFineLogEntity" id="clOverdueFineLogMap">
+        <result property="id" column="id"/>
+        <result property="borrowId" column="borrow_id"/>
+        <result property="repayId" column="repay_id"/>
+        <result property="total" column="total"/>
+        <result property="rate" column="rate"/>
+        <result property="day" column="day"/>
+        <result property="fine" column="fine"/>
+        <result property="amount" column="amount"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		borrow_id, 
+		repay_id, 
+		total, 
+		rate, 
+		day, 
+		fine, 
+		amount, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClOverdueFineLogEntity" resultMap="clOverdueFineLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_overdue_fine_log
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClOverdueFineLogEntity" resultMap="clOverdueFineLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_overdue_fine_log
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClOverdueFineLogEntity" resultMap="clOverdueFineLogMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_overdue_fine_log
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_overdue_fine_log
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClOverdueFineLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_overdue_fine_log
+		(
+			`borrow_id`, 
+			`repay_id`, 
+			`total`, 
+			`rate`, 
+			`day`, 
+			`fine`, 
+			`amount`, 
+			`create_time`
+		)
+		values
+		(
+			#{borrowId}, 
+			#{repayId}, 
+			#{total}, 
+			#{rate}, 
+			#{day}, 
+			#{fine}, 
+			#{amount}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClOverdueFineLogEntity">
+		update cl_overdue_fine_log 
+		<set>
+			<if test="borrowId != null">`borrow_id` = #{borrowId}, </if>
+			<if test="repayId != null">`repay_id` = #{repayId}, </if>
+			<if test="total != null">`total` = #{total}, </if>
+			<if test="rate != null">`rate` = #{rate}, </if>
+			<if test="day != null">`day` = #{day}, </if>
+			<if test="fine != null">`fine` = #{fine}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_overdue_fine_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_overdue_fine_log where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClBannerConfigDao">
+
+
+    <resultMap type="org.loan.core.domain.ClBannerConfigEntity" id="clBannerConfigMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="url" column="url"/>
+        <result property="sort" column="sort"/>
+        <result property="type" column="type"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="addName" column="add_name"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		title, 
+		url, 
+		sort, 
+		type, 
+		state, 
+		create_time, 
+		add_name
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClBannerConfigEntity" resultMap="clBannerConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_banner_config
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClBannerConfigEntity" resultMap="clBannerConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_banner_config
+        <where>
+        	<if test="type!=null and type!=''">
+        		and (type=#{type} or type='0')
+        	</if>
+        	<if test="state!=null and state!=''">
+        		and state=#{state}
+        	</if>
+        	<if test="positions!=null and positions!=''">
+        		and (positions=#{positions} or positions='-1')
+        	</if>
+        	<if test="date!=null">
+        		and (start_time is null or start_time &lt; #{date})
+        		and (end_time is null or end_time &gt; #{date})
+        	</if>
+        </where>
+        order by sort asc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+   
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_banner_config
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClBannerConfigEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_banner_config
+		(
+			`title`, 
+			`url`, 
+			`sort`, 
+			`type`, 
+			`state`, 
+			`create_time`, 
+			`add_name`
+		)
+		values
+		(
+			#{title}, 
+			#{url}, 
+			#{sort}, 
+			#{type}, 
+			#{state}, 
+			#{createTime}, 
+			#{addName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClBannerConfigEntity">
+		update cl_banner_config 
+		<set>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="sort != null">`sort` = #{sort}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="addName != null">`add_name` = #{addName}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_banner_config where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_banner_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

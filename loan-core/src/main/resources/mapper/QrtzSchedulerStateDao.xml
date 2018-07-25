@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.QrtzSchedulerStateDao">
+
+
+    <resultMap type="org.loan.core.domain.QrtzSchedulerStateEntity" id="qrtzSchedulerStateMap">
+        <result property="schedName" column="SCHED_NAME"/>
+        <result property="instanceName" column="INSTANCE_NAME"/>
+        <result property="lastCheckinTime" column="LAST_CHECKIN_TIME"/>
+        <result property="checkinInterval" column="CHECKIN_INTERVAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		SCHED_NAME, 
+		INSTANCE_NAME, 
+		LAST_CHECKIN_TIME, 
+		CHECKIN_INTERVAL
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.QrtzSchedulerStateEntity" resultMap="qrtzSchedulerStateMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_scheduler_state
+		where SCHED_NAME = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.QrtzSchedulerStateEntity" resultMap="qrtzSchedulerStateMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_scheduler_state
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by SCHED_NAME desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.QrtzSchedulerStateEntity" resultMap="qrtzSchedulerStateMap">
+        select
+        <include refid="Base_Column_List" />
+        from qrtz_scheduler_state
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from qrtz_scheduler_state
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.QrtzSchedulerStateEntity">
+		insert into qrtz_scheduler_state
+		(
+			`SCHED_NAME`, 
+			`INSTANCE_NAME`, 
+			`LAST_CHECKIN_TIME`, 
+			`CHECKIN_INTERVAL`
+		)
+		values
+		(
+			#{schedName}, 
+			#{instanceName}, 
+			#{lastCheckinTime}, 
+			#{checkinInterval}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.QrtzSchedulerStateEntity">
+		update qrtz_scheduler_state 
+		<set>
+			<if test="instanceName != null">`INSTANCE_NAME` = #{instanceName}, </if>
+			<if test="lastCheckinTime != null">`LAST_CHECKIN_TIME` = #{lastCheckinTime}, </if>
+			<if test="checkinInterval != null">`CHECKIN_INTERVAL` = #{checkinInterval}</if>
+		</set>
+		where SCHED_NAME = #{schedName}
+	</update>
+	
+	<delete id="delete">
+		delete from qrtz_scheduler_state where SCHED_NAME = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from qrtz_scheduler_state where SCHED_NAME in 
+		<foreach item="schedName" collection="array" open="(" separator="," close=")">
+			#{schedName}
+		</foreach>
+	</delete>
+
+</mapper>

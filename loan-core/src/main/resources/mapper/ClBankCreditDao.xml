@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClBankCreditDao">
+
+
+    <resultMap type="org.loan.core.domain.ClBankCreditEntity" id="clBankCreditMap">
+        <result property="id" column="id"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="bankCode" column="bank_code"/>
+        <result property="credit" column="credit"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		bank_name, 
+		bank_code, 
+		credit, 
+		type
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClBankCreditEntity" resultMap="clBankCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_bank_credit
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClBankCreditEntity" resultMap="clBankCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_bank_credit
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClBankCreditEntity" resultMap="clBankCreditMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_bank_credit
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_bank_credit
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClBankCreditEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_bank_credit
+		(
+			`bank_name`, 
+			`bank_code`, 
+			`credit`, 
+			`type`
+		)
+		values
+		(
+			#{bankName}, 
+			#{bankCode}, 
+			#{credit}, 
+			#{type}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClBankCreditEntity">
+		update cl_bank_credit 
+		<set>
+			<if test="bankName != null">`bank_name` = #{bankName}, </if>
+			<if test="bankCode != null">`bank_code` = #{bankCode}, </if>
+			<if test="credit != null">`credit` = #{credit}, </if>
+			<if test="type != null">`type` = #{type}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_bank_credit where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_bank_credit where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

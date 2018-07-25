@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClBorrowRepayThirdDao">
+
+
+    <resultMap type="org.loan.core.domain.ClBorrowRepayThirdEntity" id="clBorrowRepayThirdMap">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="borrowRepayId" column="borrow_repay_id"/>
+        <result property="thirdRepayNo" column="third_repay_no"/>
+        <result property="repayAmount" column="repay_amount"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="interest" column="interest"/>
+        <result property="penaltyAmout" column="penalty_amout"/>
+        <result property="principleAmount" column="principle_amount"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		order_no, 
+		borrow_repay_id, 
+		third_repay_no, 
+		repay_amount, 
+		status, 
+		create_time, 
+		update_time, 
+		interest, 
+		penalty_amout, 
+		principle_amount
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClBorrowRepayThirdEntity" resultMap="clBorrowRepayThirdMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay_third
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClBorrowRepayThirdEntity" resultMap="clBorrowRepayThirdMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay_third
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClBorrowRepayThirdEntity" resultMap="clBorrowRepayThirdMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_repay_third
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_borrow_repay_third
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClBorrowRepayThirdEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_borrow_repay_third
+		(
+			`order_no`, 
+			`borrow_repay_id`, 
+			`third_repay_no`, 
+			`repay_amount`, 
+			`status`, 
+			`create_time`, 
+			`update_time`, 
+			`interest`, 
+			`penalty_amout`, 
+			`principle_amount`
+		)
+		values
+		(
+			#{orderNo}, 
+			#{borrowRepayId}, 
+			#{thirdRepayNo}, 
+			#{repayAmount}, 
+			#{status}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{interest}, 
+			#{penaltyAmout}, 
+			#{principleAmount}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClBorrowRepayThirdEntity">
+		update cl_borrow_repay_third 
+		<set>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="borrowRepayId != null">`borrow_repay_id` = #{borrowRepayId}, </if>
+			<if test="thirdRepayNo != null">`third_repay_no` = #{thirdRepayNo}, </if>
+			<if test="repayAmount != null">`repay_amount` = #{repayAmount}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="interest != null">`interest` = #{interest}, </if>
+			<if test="penaltyAmout != null">`penalty_amout` = #{penaltyAmout}, </if>
+			<if test="principleAmount != null">`principle_amount` = #{principleAmount}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_borrow_repay_third where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_borrow_repay_third where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

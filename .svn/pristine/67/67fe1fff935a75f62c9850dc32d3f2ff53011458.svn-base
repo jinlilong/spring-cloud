@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClBorrowThirdDao">
+
+
+    <resultMap type="org.loan.core.domain.ClBorrowThirdEntity" id="clBorrowThirdMap">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="thirdNo" column="third_no"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="payAmount" column="pay_amount"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		order_no, 
+		third_no, 
+		status, 
+		create_time, 
+		update_time, 
+		pay_amount
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClBorrowThirdEntity" resultMap="clBorrowThirdMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_third
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClBorrowThirdEntity" resultMap="clBorrowThirdMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_third
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClBorrowThirdEntity" resultMap="clBorrowThirdMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_third
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_borrow_third
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClBorrowThirdEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_borrow_third
+		(
+			`order_no`, 
+			`third_no`, 
+			`status`, 
+			`create_time`, 
+			`update_time`, 
+			`pay_amount`
+		)
+		values
+		(
+			#{orderNo}, 
+			#{thirdNo}, 
+			#{status}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{payAmount}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClBorrowThirdEntity">
+		update cl_borrow_third 
+		<set>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="thirdNo != null">`third_no` = #{thirdNo}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="payAmount != null">`pay_amount` = #{payAmount}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_borrow_third where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_borrow_third where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

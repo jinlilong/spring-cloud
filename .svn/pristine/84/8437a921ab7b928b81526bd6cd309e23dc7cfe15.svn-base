@@ -1,0 +1,19 @@
+spring.profiles.active=@activatedProperties@
+spring.application.name=loan-user
+# tomcat
+server.context-path=/
+server.tomcat.uri-encoding=UTF-8
+
+spring.mvc.throw-exception-if-no-handler-found=true
+spring.resources.add-mappings=false
+
+
+# \u6587\u4EF6\u4E0A\u4F20\u5927\u5C0F
+spring.http.multipart.enabled=true
+spring.http.multipart.maxFileSize=20Mb
+spring.http.multipart.maxRequestSize=20Mb
+
+
+# mybatis
+mybatis.type-aliases-package=org.loan.core.dao
+mybatis.mapper-locations=classpath*:mapper/*.xml

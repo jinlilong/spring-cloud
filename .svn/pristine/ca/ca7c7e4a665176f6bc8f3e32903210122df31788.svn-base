@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClMortgageImgDao">
+
+
+    <resultMap type="org.loan.core.domain.ClMortgageImgEntity" id="clMortgageImgMap">
+        <result property="id" column="id"/>
+        <result property="mid" column="mid"/>
+        <result property="userId" column="user_id"/>
+        <result property="imgCat" column="img_cat"/>
+        <result property="imgUrl" column="img_url"/>
+        <result property="seq" column="seq"/>
+        <result property="created" column="created"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		mid, 
+		user_id, 
+		img_cat, 
+		img_url, 
+		seq, 
+		created
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClMortgageImgEntity" resultMap="clMortgageImgMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_mortgage_img
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClMortgageImgEntity" resultMap="clMortgageImgMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_mortgage_img
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClMortgageImgEntity" resultMap="clMortgageImgMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_mortgage_img
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_mortgage_img
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClMortgageImgEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_mortgage_img
+		(
+			`mid`, 
+			`user_id`, 
+			`img_cat`, 
+			`img_url`, 
+			`seq`, 
+			`created`
+		)
+		values
+		(
+			#{mid}, 
+			#{userId}, 
+			#{imgCat}, 
+			#{imgUrl}, 
+			#{seq}, 
+			#{created}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClMortgageImgEntity">
+		update cl_mortgage_img 
+		<set>
+			<if test="mid != null">`mid` = #{mid}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="imgCat != null">`img_cat` = #{imgCat}, </if>
+			<if test="imgUrl != null">`img_url` = #{imgUrl}, </if>
+			<if test="seq != null">`seq` = #{seq}, </if>
+			<if test="created != null">`created` = #{created}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_mortgage_img where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_mortgage_img where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

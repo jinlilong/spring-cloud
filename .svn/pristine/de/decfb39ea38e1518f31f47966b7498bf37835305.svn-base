@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClUserBaseInfoDao">
+
+
+    <resultMap type="org.loan.core.domain.ClUserBaseInfoEntity" id="ClUserBaseInfoEntityMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="phone" column="phone"/>
+        <result property="realName" column="real_name"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="national" column="national"/>
+        <result property="idNo" column="id_no"/>
+        <result property="idAddr" column="id_addr"/>
+        <result property="livingImg" column="living_img"/>
+        <result property="ocrImg" column="ocr_img"/>
+        <result property="frontImg" column="front_img"/>
+        <result property="backImg" column="back_img"/>
+        <result property="signatureImg" column="signature_img"/>
+        <result property="education" column="education"/>
+        <result property="marryState" column="marry_state"/>
+        <result property="companyName" column="company_name"/>
+        <result property="companyPhone" column="company_phone"/>
+        <result property="companyAddr" column="company_addr"/>
+        <result property="companyDetailAddr" column="company_detail_addr"/>
+        <result property="companyCoordinate" column="company_coordinate"/>
+        <result property="salary" column="salary"/>
+        <result property="workingYears" column="working_years"/>
+        <result property="workingImg" column="working_img"/>
+        <result property="liveTime" column="live_time"/>
+        <result property="liveAddr" column="live_addr"/>
+        <result property="liveDetailAddr" column="live_detail_addr"/>
+        <result property="liveCoordinate" column="live_coordinate"/>
+        <result property="phoneServerPwd" column="phone_server_pwd"/>
+        <result property="registerAddr" column="register_addr"/>
+        <result property="registerCoordinate" column="register_coordinate"/>
+        <result property="state" column="state"/>
+        <result property="blackReason" column="black_reason"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		phone, 
+		real_name, 
+		age, 
+		sex, 
+		national, 
+		id_no, 
+		id_addr, 
+		living_img, 
+		ocr_img, 
+		front_img, 
+		back_img, 
+		signature_img, 
+		education, 
+		marry_state, 
+		company_name, 
+		company_phone, 
+		company_addr, 
+		company_detail_addr, 
+		company_coordinate, 
+		salary, 
+		working_years, 
+		working_img, 
+		live_time, 
+		live_addr, 
+		live_detail_addr, 
+		live_coordinate, 
+		phone_server_pwd, 
+		register_addr, 
+		register_coordinate, 
+		state, 
+		black_reason, 
+		update_time, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClUserBaseInfoEntity" resultMap="ClUserBaseInfoEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_base_info
+		where id = #{value}
+	</select>
+	
+	<select id="queryObjectByUserId" resultType="org.loan.core.domain.ClUserBaseInfoEntity" resultMap="ClUserBaseInfoEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_base_info
+		where user_id=#{0}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClUserBaseInfoEntity" resultMap="ClUserBaseInfoEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_base_info
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClUserBaseInfoEntity" resultMap="ClUserBaseInfoEntityMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_base_info
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_user_base_info
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClUserBaseInfoEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_user_base_info
+		(
+			`user_id`, 
+			`phone`, 
+			`real_name`, 
+			`age`, 
+			`sex`, 
+			`national`, 
+			`id_no`, 
+			`id_addr`, 
+			`living_img`, 
+			`ocr_img`, 
+			`front_img`, 
+			`back_img`, 
+			`signature_img`, 
+			`education`, 
+			`marry_state`, 
+			`company_name`, 
+			`company_phone`, 
+			`company_addr`, 
+			`company_detail_addr`, 
+			`company_coordinate`, 
+			`salary`, 
+			`working_years`, 
+			`working_img`, 
+			`live_time`, 
+			`live_addr`, 
+			`live_detail_addr`, 
+			`live_coordinate`, 
+			`phone_server_pwd`, 
+			`register_addr`, 
+			`register_coordinate`, 
+			`state`, 
+			`black_reason`, 
+			`update_time`, 
+			`create_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{phone}, 
+			#{realName}, 
+			#{age}, 
+			#{sex}, 
+			#{national}, 
+			#{idNo}, 
+			#{idAddr}, 
+			#{livingImg}, 
+			#{ocrImg}, 
+			#{frontImg}, 
+			#{backImg}, 
+			#{signatureImg}, 
+			#{education}, 
+			#{marryState}, 
+			#{companyName}, 
+			#{companyPhone}, 
+			#{companyAddr}, 
+			#{companyDetailAddr}, 
+			#{companyCoordinate}, 
+			#{salary}, 
+			#{workingYears}, 
+			#{workingImg}, 
+			#{liveTime}, 
+			#{liveAddr}, 
+			#{liveDetailAddr}, 
+			#{liveCoordinate}, 
+			#{phoneServerPwd}, 
+			#{registerAddr}, 
+			#{registerCoordinate}, 
+			#{state}, 
+			#{blackReason}, 
+			#{updateTime}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClUserBaseInfoEntity">
+		update cl_user_base_info 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="realName != null">`real_name` = #{realName}, </if>
+			<if test="age != null">`age` = #{age}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="national != null">`national` = #{national}, </if>
+			<if test="idNo != null">`id_no` = #{idNo}, </if>
+			<if test="idAddr != null">`id_addr` = #{idAddr}, </if>
+			<if test="livingImg != null">`living_img` = #{livingImg}, </if>
+			<if test="ocrImg != null">`ocr_img` = #{ocrImg}, </if>
+			<if test="frontImg != null">`front_img` = #{frontImg}, </if>
+			<if test="backImg != null">`back_img` = #{backImg}, </if>
+			<if test="signatureImg != null">`signature_img` = #{signatureImg}, </if>
+			<if test="education != null">`education` = #{education}, </if>
+			<if test="marryState != null">`marry_state` = #{marryState}, </if>
+			<if test="companyName != null">`company_name` = #{companyName}, </if>
+			<if test="companyPhone != null">`company_phone` = #{companyPhone}, </if>
+			<if test="companyAddr != null">`company_addr` = #{companyAddr}, </if>
+			<if test="companyDetailAddr != null">`company_detail_addr` = #{companyDetailAddr}, </if>
+			<if test="companyCoordinate != null">`company_coordinate` = #{companyCoordinate}, </if>
+			<if test="salary != null">`salary` = #{salary}, </if>
+			<if test="workingYears != null">`working_years` = #{workingYears}, </if>
+			<if test="workingImg != null">`working_img` = #{workingImg}, </if>
+			<if test="liveTime != null">`live_time` = #{liveTime}, </if>
+			<if test="liveAddr != null">`live_addr` = #{liveAddr}, </if>
+			<if test="liveDetailAddr != null">`live_detail_addr` = #{liveDetailAddr}, </if>
+			<if test="liveCoordinate != null">`live_coordinate` = #{liveCoordinate}, </if>
+			<if test="phoneServerPwd != null">`phone_server_pwd` = #{phoneServerPwd}, </if>
+			<if test="registerAddr != null">`register_addr` = #{registerAddr}, </if>
+			<if test="registerCoordinate != null">`register_coordinate` = #{registerCoordinate}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="blackReason != null">`black_reason` = #{blackReason}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_user_base_info where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_user_base_info where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

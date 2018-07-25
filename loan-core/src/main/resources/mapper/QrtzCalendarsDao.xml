@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.QrtzCalendarsDao">
+
+
+    <resultMap type="org.loan.core.domain.QrtzCalendarsEntity" id="qrtzCalendarsMap">
+        <result property="schedName" column="SCHED_NAME"/>
+        <result property="calendarName" column="CALENDAR_NAME"/>
+        <result property="calendar" column="CALENDAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		SCHED_NAME, 
+		CALENDAR_NAME, 
+		CALENDAR
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.QrtzCalendarsEntity" resultMap="qrtzCalendarsMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_calendars
+		where SCHED_NAME = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.QrtzCalendarsEntity" resultMap="qrtzCalendarsMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_calendars
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by SCHED_NAME desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.QrtzCalendarsEntity" resultMap="qrtzCalendarsMap">
+        select
+        <include refid="Base_Column_List" />
+        from qrtz_calendars
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from qrtz_calendars
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.QrtzCalendarsEntity">
+		insert into qrtz_calendars
+		(
+			`SCHED_NAME`, 
+			`CALENDAR_NAME`, 
+			`CALENDAR`
+		)
+		values
+		(
+			#{schedName}, 
+			#{calendarName}, 
+			#{calendar}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.QrtzCalendarsEntity">
+		update qrtz_calendars 
+		<set>
+			<if test="calendarName != null">`CALENDAR_NAME` = #{calendarName}, </if>
+			<if test="calendar != null">`CALENDAR` = #{calendar}</if>
+		</set>
+		where SCHED_NAME = #{schedName}
+	</update>
+	
+	<delete id="delete">
+		delete from qrtz_calendars where SCHED_NAME = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from qrtz_calendars where SCHED_NAME in 
+		<foreach item="schedName" collection="array" open="(" separator="," close=")">
+			#{schedName}
+		</foreach>
+	</delete>
+
+</mapper>

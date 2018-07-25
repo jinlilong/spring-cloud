@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.BestSignContractDao">
+
+
+    <resultMap type="org.loan.core.domain.BestSignContractEntity" id="bestSignContractMap">
+		<result property="id" column="id"/>
+		<result property="uuid" column="uuid"/>
+		<result property="userId" column="user_id"/>
+		<result property="borrowId" column="borrow_id"/>
+		<result property="fid" column="fid"/>
+		<result property="contractid" column="contractId"/>
+		<result property="expireTime" column="expire_time"/>
+		<result property="descript" column="descript"/>
+		<result property="cat" column="cat"/>
+		<result property="state" column="state"/>
+		<result property="contraceUrl" column="contrace_url"/>
+		<result property="created" column="created"/>
+		<result property="fileType" column="file_type"/>
+		<result property="status" column="status"/>
+		<result property="contractNum" column="contract_num"/>
+		<result property="organCode" column="organ_code"/>
+		<result property="contractUrl" column="contract_url"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		uuid,
+		user_id,
+		borrow_id,
+		fid,
+		contractId,
+		expire_time,
+		descript,
+		cat,
+		state,
+		contrace_url,
+		created,
+		file_type,
+		status,
+		contract_num,
+		organ_code,
+		contract_url
+    </sql>
+
+	<select id="queryObjectByContractId" resultType="org.loan.core.domain.BestSignContractEntity" resultMap="bestSignContractMap">
+		select
+		<include refid="Base_Column_List" />
+		from best_sign_contract
+		where contractId = #{contractId}
+	</select>
+
+	<select id="queryObject" resultType="org.loan.core.domain.BestSignContractEntity" resultMap="bestSignContractMap">
+		select
+		<include refid="Base_Column_List" />
+		from best_sign_contract
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.BestSignContractEntity" resultMap="bestSignContractMap">
+		select
+		<include refid="Base_Column_List" />
+		from best_sign_contract
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.BestSignContractEntity" resultMap="bestSignContractMap">
+        select
+        <include refid="Base_Column_List" />
+        from best_sign_contract
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from best_sign_contract
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.BestSignContractEntity" useGeneratedKeys="true" keyProperty="id">
+	insert into best_sign_contract
+		(
+			`uuid`,
+			`user_id`,
+			`borrow_id`,
+			`fid`,
+			`contractId`,
+			`expire_time`,
+			`descript`,
+			`cat`,
+			`state`,
+			`contrace_url`,
+			`created`,
+			`file_type`,
+			`status`,
+			`contract_num`,
+			`organ_code`,
+			`contract_url`
+		)
+		values
+		(
+			#{uuid},
+			#{userId},
+			#{borrowId},
+			#{fid},
+			#{contractid},
+			#{expireTime},
+			#{descript},
+			#{cat},
+			#{state},
+			#{contraceUrl},
+			#{created},
+			#{fileType},
+			#{status},
+			#{contractNum},
+			#{organCode},
+			#{contractUrl}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.BestSignContractEntity">
+		update best_sign_contract
+		<set>
+			<if test="uuid != null">`uuid` = #{uuid}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="borrowId != null">`borrow_id` = #{borrowId}, </if>
+			<if test="fid != null">`fid` = #{fid}, </if>
+			<if test="contractid != null">`contractId` = #{contractid}, </if>
+			<if test="expireTime != null">`expire_time` = #{expireTime}, </if>
+			<if test="descript != null">`descript` = #{descript}, </if>
+			<if test="cat != null">`cat` = #{cat}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="contraceUrl != null">`contrace_url` = #{contraceUrl}, </if>
+			<if test="created != null">`created` = #{created}, </if>
+			<if test="fileType != null">`file_type` = #{fileType}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="contractNum != null">`contract_num` = #{contractNum}, </if>
+			<if test="organCode != null">`organ_code` = #{organCode},</if>
+			<if test="contractUrl != null">`contract_url` = #{contractUrl}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="updateByUuid" parameterType="org.loan.core.domain.BestSignContractEntity">
+		update best_sign_contract
+		<set>
+			<if test="uuid != null">`uuid` = #{uuid}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="borrowId != null">`borrow_id` = #{borrowId}, </if>
+			<if test="fid != null">`fid` = #{fid}, </if>
+			<if test="contractid != null">`contractId` = #{contractid}, </if>
+			<if test="expireTime != null">`expire_time` = #{expireTime}, </if>
+			<if test="descript != null">`descript` = #{descript}, </if>
+			<if test="cat != null">`cat` = #{cat}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="contraceUrl != null">`contrace_url` = #{contraceUrl}, </if>
+			<if test="created != null">`created` = #{created}, </if>
+			<if test="fileType != null">`file_type` = #{fileType}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="contractNum != null">`contract_num` = #{contractNum}, </if>
+			<if test="organCode != null">`organ_code` = #{organCode},</if>
+			<if test="contractUrl != null">`contract_url` = #{contractUrl}</if>
+		</set>
+		where uuid = #{uuid}
+	</update>
+
+	<delete id="delete">
+		delete from best_sign_contract where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from best_sign_contract where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="selectByParam"  parameterType="org.loan.core.domain.BestSignContractEntity" resultType="org.loan.core.domain.BestSignContractEntity" resultMap="bestSignContractMap">
+		select
+		<include refid="Base_Column_List" />
+		from best_sign_contract
+		<where>
+			<if test="userId!=null and userId!=''">
+				and user_id=#{userId}
+			</if>
+			<if test="fileType!=null and fileType!=''">
+				and file_type=#{fileType}
+			</if>
+			<if test="uuid!=null and uuid!=''">
+				and uuid=#{uuid}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="getOtherContractId" resultType="org.loan.core.domain.BestSignContractEntity" resultMap="bestSignContractMap">
+			SELECT contractId,file_type  FROM best_sign_contract WHERE UUID=(SELECT UUID FROM best_sign_contract WHERE contractId=#{contractId})
+	</select>
+	
+	
+	<update id="updateByContractId">
+			update best_sign_contract
+			<set>
+				<if test="status != null">`status` = #{status} </if>
+			</set>
+			WHERE contractId=#{contractId}
+	</update>
+	
+	
+	<select id="getOtherContractByUUID" resultType="org.loan.core.domain.BestSignContractEntity" resultMap="bestSignContractMap">
+		    SELECT contractId,file_type  FROM best_sign_contract WHERE UUID=#{uuid}
+	</select>
+	
+	
+	<select id="queryUserMainContract" resultType="org.loan.core.domain.BestSignContractEntity" resultMap="bestSignContractMap">
+		select 
+		<include refid="Base_Column_List" />
+		from best_sign_contract
+		where user_id=#{userId} and  contract_num=#{contractNum} and status='2' and borrow_id is not null limit 1
+	</select>
+	
+	
+</mapper>

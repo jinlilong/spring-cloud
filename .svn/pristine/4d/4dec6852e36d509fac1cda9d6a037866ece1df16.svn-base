@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.UserDao">
+
+
+    <resultMap type="org.loan.core.domain.UserEntity" id="userMap">
+        <result property="id" column="id"/>
+        <result property="avatar" column="avatar"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="name" column="name"/>
+        <result property="birthday" column="birthday"/>
+        <result property="sex" column="sex"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="roleid" column="roleid"/>
+        <result property="deptid" column="deptid"/>
+        <result property="status" column="status"/>
+        <result property="createtime" column="createtime"/>
+        <result property="version" column="version"/>
+        <result property="rolename" column="rolename"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		avatar, 
+		account, 
+		password, 
+		salt, 
+		name, 
+		birthday, 
+		sex, 
+		email, 
+		phone, 
+		roleid, 
+		deptid, 
+		status, 
+		createtime, 
+		version, 
+		rolename
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.UserEntity" resultMap="userMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.UserEntity" resultMap="userMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.UserEntity" resultMap="userMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_user
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sys_user
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.UserEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user
+		(
+			`avatar`, 
+			`account`, 
+			`password`, 
+			`salt`, 
+			`name`, 
+			`birthday`, 
+			`sex`, 
+			`email`, 
+			`phone`, 
+			`roleid`, 
+			`deptid`, 
+			`status`, 
+			`createtime`, 
+			`version`, 
+			`rolename`
+		)
+		values
+		(
+			#{avatar}, 
+			#{account}, 
+			#{password}, 
+			#{salt}, 
+			#{name}, 
+			#{birthday}, 
+			#{sex}, 
+			#{email}, 
+			#{phone}, 
+			#{roleid}, 
+			#{deptid}, 
+			#{status}, 
+			#{createtime}, 
+			#{version}, 
+			#{rolename}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.UserEntity">
+		update sys_user 
+		<set>
+			<if test="avatar != null">`avatar` = #{avatar}, </if>
+			<if test="account != null">`account` = #{account}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="salt != null">`salt` = #{salt}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="birthday != null">`birthday` = #{birthday}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="email != null">`email` = #{email}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="roleid != null">`roleid` = #{roleid}, </if>
+			<if test="deptid != null">`deptid` = #{deptid}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createtime != null">`createtime` = #{createtime}, </if>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="rolename != null">`rolename` = #{rolename}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sys_user where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sys_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpConfigDao">
+
+
+    <resultMap type="org.loan.core.domain.SpConfigEntity" id="spConfigMap">
+        <result property="id" column="id"/>
+        <result property="key" column="key"/>
+        <result property="value" column="value"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		`key`, 
+		value, 
+		status, 
+		remark
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpConfigEntity" resultMap="spConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_config
+		where id = #{value}
+	</select>
+	
+	
+	<select id="queryByKey" resultType="org.loan.core.domain.SpConfigEntity" resultMap="spConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_config
+		where `key` = #{0}
+	</select>
+	
+
+	<select id="queryList" resultType="org.loan.core.domain.SpConfigEntity" resultMap="spConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_config
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpConfigEntity" resultMap="spConfigMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_sys_config
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_sys_config
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpConfigEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_sys_config
+		(
+			`key`, 
+			`value`, 
+			`status`, 
+			`remark`
+		)
+		values
+		(
+			#{key}, 
+			#{value}, 
+			#{status}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpConfigEntity">
+		update sp_sys_config 
+		<set>
+			<if test="key != null">`key` = #{key}, </if>
+			<if test="value != null">`value` = #{value}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_sys_config where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_sys_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

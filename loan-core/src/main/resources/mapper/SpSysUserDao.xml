@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpSysUserDao">
+
+
+    <resultMap type="org.loan.core.domain.SpSysUserEntity" id="spSysUserMap">
+        <result property="id" column="id"/>
+        <result property="bapid" column="bapid"/>
+        <result property="userName" column="user_name"/>
+        <result property="loginName" column="login_name"/>
+        <result property="passWord" column="pass_word"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="phone" column="phone"/>
+        <result property="photo" column="photo"/>
+        <result property="email" column="email"/>
+        <result property="createId" column="create_id"/>
+        <result property="updateId" column="update_id"/>
+        <result property="remark" column="remark"/>
+        <result property="baid" column="baid"/>
+        <result property="salt" column="salt"/>
+        <result property="organCode" column="organ_code"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		bapid, 
+		user_name, 
+		login_name, 
+		pass_word, 
+		create_time, 
+		update_time, 
+		status, 
+		phone, 
+		photo, 
+		email, 
+		create_id, 
+		update_id, 
+		remark, 
+		baid, 
+		salt, 
+		organ_code
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpSysUserEntity" resultMap="spSysUserMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_user
+		where id = #{value}
+	</select>
+
+	<select id="querySpSysUser"  resultMap="spSysUserMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_user
+		where login_name = #{0}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpSysUserEntity" resultMap="spSysUserMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_user
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpSysUserEntity" resultMap="spSysUserMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_sys_user
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_sys_user
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpSysUserEntity">
+		insert into sp_sys_user
+		(
+			`id`, 
+			`bapid`, 
+			`user_name`, 
+			`login_name`, 
+			`pass_word`, 
+			`create_time`, 
+			`update_time`, 
+			`status`, 
+			`phone`, 
+			`photo`, 
+			`email`, 
+			`create_id`, 
+			`update_id`, 
+			`remark`, 
+			`baid`, 
+			`salt`, 
+			`organ_code`
+		)
+		values
+		(
+			#{id}, 
+			#{bapid}, 
+			#{userName}, 
+			#{loginName}, 
+			#{passWord}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{status}, 
+			#{phone}, 
+			#{photo}, 
+			#{email}, 
+			#{createId}, 
+			#{updateId}, 
+			#{remark}, 
+			#{baid}, 
+			#{salt}, 
+			#{organCode}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpSysUserEntity">
+		update sp_sys_user 
+		<set>
+			<if test="bapid != null">`bapid` = #{bapid}, </if>
+			<if test="userName != null">`user_name` = #{userName}, </if>
+			<if test="loginName != null">`login_name` = #{loginName}, </if>
+			<if test="passWord != null">`pass_word` = #{passWord}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="photo != null">`photo` = #{photo}, </if>
+			<if test="email != null">`email` = #{email}, </if>
+			<if test="createId != null">`create_id` = #{createId}, </if>
+			<if test="updateId != null">`update_id` = #{updateId}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="baid != null">`baid` = #{baid}, </if>
+			<if test="salt != null">`salt` = #{salt}, </if>
+			<if test="organCode != null">`organ_code` = #{organCode}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_sys_user where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_sys_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

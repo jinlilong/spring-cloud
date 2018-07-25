@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClWContactsDao">
+
+
+    <resultMap type="org.loan.core.domain.ClWContactsEntity" id="clWContactsMap">
+        <result property="id" column="id"/>
+        <result property="phone" column="phone"/>
+        <result property="idNo" column="id_no"/>
+        <result property="name" column="name"/>
+        <result property="src" column="src"/>
+        <result property="state" column="state"/>
+        <result property="isCredit" column="is_credit"/>
+        <result property="isDy" column="is_dy"/>
+        <result property="isBorrow" column="is_borrow"/>
+        <result property="personIncome" column="person_income"/>
+        <result property="education" column="education"/>
+        <result property="liveAddr" column="live_addr"/>
+        <result property="liveCommunity" column="live_community"/>
+        <result property="dyValue" column="dy_value"/>
+        <result property="dyValueDiscount" column="dy_value_discount"/>
+        <result property="dyTerm" column="dy_term"/>
+        <result property="dyCity" column="dy_city"/>
+        <result property="companyName" column="company_name"/>
+        <result property="companyType" column="company_type"/>
+        <result property="companyAddr" column="company_addr"/>
+        <result property="borrowRate" column="borrow_rate"/>
+        <result property="quotaExpire" column="quota_expire"/>
+        <result property="borrowQuota" column="borrow_quota"/>
+        <result property="updated" column="updated"/>
+        <result property="created" column="created"/>
+        <result property="creditLines" column="credit_lines"/>
+        <result property="vocation" column="vocation"/>
+        <result property="tipsPhone" column="tips_phone"/>
+        <result property="riskLevel" column="risk_level"/>
+        <result property="oldRepayRate" column="old_repay_rate"/>
+        <result property="unuseBorrowBalance" column="unuse_borrow_balance"/>
+        <result property="monthRepayBalance" column="month_repay_balance"/>
+        <result property="originalLimit" column="original_limit"/>
+        <result property="surplusLimit" column="surplus_limit"/>
+        <result property="isAvailability" column="is_availability"/>
+        <result property="borrowid" column="borrowId"/>
+        <result property="declarationCompany" column="declaration_company"/>
+        <result property="declarationPeople" column="declaration_people"/>
+        <result property="mortgageTestify" column="mortgage_testify"/>
+        <result property="cityCode" column="city_code"/>
+        <result property="parkingPosition" column="parking_position"/>
+        <result property="msg" column="msg"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		phone, 
+		id_no, 
+		name, 
+		src, 
+		state, 
+		is_credit, 
+		is_dy, 
+		is_borrow, 
+		person_income, 
+		education, 
+		live_addr, 
+		live_community, 
+		dy_value, 
+		dy_value_discount, 
+		dy_term, 
+		dy_city, 
+		company_name, 
+		company_type, 
+		company_addr, 
+		borrow_rate, 
+		quota_expire, 
+		borrow_quota, 
+		updated, 
+		created, 
+		credit_lines, 
+		vocation, 
+		tips_phone, 
+		risk_level, 
+		old_repay_rate, 
+		unuse_borrow_balance, 
+		month_repay_balance, 
+		original_limit, 
+		surplus_limit, 
+		is_availability, 
+		borrowId, 
+		declaration_company, 
+		declaration_people, 
+		mortgage_testify, 
+		city_code, 
+		parking_position, 
+		msg
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClWContactsEntity" resultMap="clWContactsMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_w_contacts
+		where id = #{value}
+	</select>
+	
+
+	<select id="queryByPhone" resultType="org.loan.core.domain.ClWContactsEntity" resultMap="clWContactsMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_w_contacts
+		where phone = #{0}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClWContactsEntity" resultMap="clWContactsMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_w_contacts
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClWContactsEntity" resultMap="clWContactsMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_w_contacts
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_w_contacts
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClWContactsEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_w_contacts
+		(
+			`phone`, 
+			`id_no`, 
+			`name`, 
+			`src`, 
+			`state`, 
+			`is_credit`, 
+			`is_dy`, 
+			`is_borrow`, 
+			`person_income`, 
+			`education`, 
+			`live_addr`, 
+			`live_community`, 
+			`dy_value`, 
+			`dy_value_discount`, 
+			`dy_term`, 
+			`dy_city`, 
+			`company_name`, 
+			`company_type`, 
+			`company_addr`, 
+			`borrow_rate`, 
+			`quota_expire`, 
+			`borrow_quota`, 
+			`updated`, 
+			`created`, 
+			`credit_lines`, 
+			`vocation`, 
+			`tips_phone`, 
+			`risk_level`, 
+			`old_repay_rate`, 
+			`unuse_borrow_balance`, 
+			`month_repay_balance`, 
+			`original_limit`, 
+			`surplus_limit`, 
+			`is_availability`, 
+			`borrowId`, 
+			`declaration_company`, 
+			`declaration_people`, 
+			`mortgage_testify`, 
+			`city_code`, 
+			`parking_position`, 
+			`msg`
+		)
+		values
+		(
+			#{phone}, 
+			#{idNo}, 
+			#{name}, 
+			#{src}, 
+			#{state}, 
+			#{isCredit}, 
+			#{isDy}, 
+			#{isBorrow}, 
+			#{personIncome}, 
+			#{education}, 
+			#{liveAddr}, 
+			#{liveCommunity}, 
+			#{dyValue}, 
+			#{dyValueDiscount}, 
+			#{dyTerm}, 
+			#{dyCity}, 
+			#{companyName}, 
+			#{companyType}, 
+			#{companyAddr}, 
+			#{borrowRate}, 
+			#{quotaExpire}, 
+			#{borrowQuota}, 
+			#{updated}, 
+			#{created}, 
+			#{creditLines}, 
+			#{vocation}, 
+			#{tipsPhone}, 
+			#{riskLevel}, 
+			#{oldRepayRate}, 
+			#{unuseBorrowBalance}, 
+			#{monthRepayBalance}, 
+			#{originalLimit}, 
+			#{surplusLimit}, 
+			#{isAvailability}, 
+			#{borrowid}, 
+			#{declarationCompany}, 
+			#{declarationPeople}, 
+			#{mortgageTestify}, 
+			#{cityCode}, 
+			#{parkingPosition}, 
+			#{msg}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClWContactsEntity">
+		update cl_w_contacts 
+		<set>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="idNo != null">`id_no` = #{idNo}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="src != null">`src` = #{src}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="isCredit != null">`is_credit` = #{isCredit}, </if>
+			<if test="isDy != null">`is_dy` = #{isDy}, </if>
+			<if test="isBorrow != null">`is_borrow` = #{isBorrow}, </if>
+			<if test="personIncome != null">`person_income` = #{personIncome}, </if>
+			<if test="education != null">`education` = #{education}, </if>
+			<if test="liveAddr != null">`live_addr` = #{liveAddr}, </if>
+			<if test="liveCommunity != null">`live_community` = #{liveCommunity}, </if>
+			<if test="dyValue != null">`dy_value` = #{dyValue}, </if>
+			<if test="dyValueDiscount != null">`dy_value_discount` = #{dyValueDiscount}, </if>
+			<if test="dyTerm != null">`dy_term` = #{dyTerm}, </if>
+			<if test="dyCity != null">`dy_city` = #{dyCity}, </if>
+			<if test="companyName != null">`company_name` = #{companyName}, </if>
+			<if test="companyType != null">`company_type` = #{companyType}, </if>
+			<if test="companyAddr != null">`company_addr` = #{companyAddr}, </if>
+			<if test="borrowRate != null">`borrow_rate` = #{borrowRate}, </if>
+			<if test="quotaExpire != null">`quota_expire` = #{quotaExpire}, </if>
+			<if test="borrowQuota != null">`borrow_quota` = #{borrowQuota}, </if>
+			<if test="updated != null">`updated` = #{updated}, </if>
+			<if test="created != null">`created` = #{created}, </if>
+			<if test="creditLines != null">`credit_lines` = #{creditLines}, </if>
+			<if test="vocation != null">`vocation` = #{vocation}, </if>
+			<if test="tipsPhone != null">`tips_phone` = #{tipsPhone}, </if>
+			<if test="riskLevel != null">`risk_level` = #{riskLevel}, </if>
+			<if test="oldRepayRate != null">`old_repay_rate` = #{oldRepayRate}, </if>
+			<if test="unuseBorrowBalance != null">`unuse_borrow_balance` = #{unuseBorrowBalance}, </if>
+			<if test="monthRepayBalance != null">`month_repay_balance` = #{monthRepayBalance}, </if>
+			<if test="originalLimit != null">`original_limit` = #{originalLimit}, </if>
+			<if test="surplusLimit != null">`surplus_limit` = #{surplusLimit}, </if>
+			<if test="isAvailability != null">`is_availability` = #{isAvailability}, </if>
+			<if test="borrowid != null">`borrowId` = #{borrowid}, </if>
+			<if test="declarationCompany != null">`declaration_company` = #{declarationCompany}, </if>
+			<if test="declarationPeople != null">`declaration_people` = #{declarationPeople}, </if>
+			<if test="mortgageTestify != null">`mortgage_testify` = #{mortgageTestify}, </if>
+			<if test="cityCode != null">`city_code` = #{cityCode}, </if>
+			<if test="parkingPosition != null">`parking_position` = #{parkingPosition}, </if>
+			<if test="msg != null">`msg` = #{msg}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_w_contacts where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_w_contacts where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

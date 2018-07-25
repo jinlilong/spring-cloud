@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClMortgageDao">
+
+    <resultMap type="org.loan.core.domain.ClMortgageEntity" id="ClMortgageEntityMap">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="mobile" column="mobile"/>
+        <result property="name" column="name"/>
+        <result property="descript" column="descript"/>
+        <result property="dyCity" column="dy_city"/>
+        <result property="dyAddress" column="dy_address"/>
+        <result property="dyCommunity" column="dy_community"/>
+        <result property="dyType" column="dy_type"/>
+        <result property="dyArea" column="dy_area"/>
+        <result property="dyBuyYear" column="dy_buy_year"/>
+        <result property="dyBuyPrice" column="dy_buy_price"/>
+        <result property="marketValue" column="market_value"/>
+        <result property="borrowAmount" column="borrow_amount"/>
+        <result property="expireDate" column="expire_date"/>
+        <result property="state" column="state"/>
+        <result property="halt" column="halt"/>
+        <result property="remark" column="remark"/>
+        <result property="applyDate" column="apply_date"/>
+        <result property="applyby" column="applyby"/>
+        <result property="realQuota" column="real_quota"/>
+        <result property="realRate" column="real_rate"/>
+        <result property="passBy" column="pass_by"/>
+        <result property="updated" column="updated"/>
+        <result property="created" column="created"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		order_no, 
+		user_id, 
+		mobile, 
+		name, 
+		descript, 
+		dy_city, 
+		dy_address, 
+		dy_community, 
+		dy_type, 
+		dy_area, 
+		dy_buy_year, 
+		dy_buy_price, 
+		market_value, 
+		borrow_amount, 
+		expire_date, 
+		state, 
+		halt, 
+		remark, 
+		apply_date, 
+		applyby, 
+		real_quota, 
+		real_rate, 
+		pass_by, 
+		updated, 
+		created
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClMortgageEntity" resultMap="ClMortgageEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_mortgage
+		where id = #{value}
+	</select>
+	
+	
+	<select id="queryByUserId" resultType="org.loan.core.domain.ClMortgageEntity" resultMap="ClMortgageEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_mortgage
+		where user_id = #{0}
+	</select>
+	
+	
+	<select id="queryByMobile" resultType="org.loan.core.domain.ClMortgageEntity" resultMap="ClMortgageEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_mortgage
+		where mobile = #{0}
+	</select>
+	
+	
+
+	<select id="queryList" resultType="org.loan.core.domain.ClMortgageEntity" resultMap="ClMortgageEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_mortgage
+        <where>
+        	<if test="mobile!=null and mobile!=''">
+        		and mobile=#{mobile}
+        	</if>
+        </where>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClMortgageEntity" resultMap="ClMortgageEntityMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_mortgage
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_mortgage
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClMortgageEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_mortgage
+		(
+			`order_no`, 
+			`user_id`, 
+			`mobile`, 
+			`name`, 
+			`descript`, 
+			`dy_city`, 
+			`dy_address`, 
+			`dy_community`, 
+			`dy_type`, 
+			`dy_area`, 
+			`dy_buy_year`, 
+			`dy_buy_price`, 
+			`market_value`, 
+			`borrow_amount`, 
+			`expire_date`, 
+			`state`, 
+			`halt`, 
+			`remark`, 
+			`apply_date`, 
+			`applyby`, 
+			`real_quota`, 
+			`real_rate`, 
+			`pass_by`, 
+			`updated`, 
+			`created`
+		)
+		values
+		(
+			#{orderNo}, 
+			#{userId}, 
+			#{mobile}, 
+			#{name}, 
+			#{descript}, 
+			#{dyCity}, 
+			#{dyAddress}, 
+			#{dyCommunity}, 
+			#{dyType}, 
+			#{dyArea}, 
+			#{dyBuyYear}, 
+			#{dyBuyPrice}, 
+			#{marketValue}, 
+			#{borrowAmount}, 
+			#{expireDate}, 
+			#{state}, 
+			#{halt}, 
+			#{remark}, 
+			#{applyDate}, 
+			#{applyby}, 
+			#{realQuota}, 
+			#{realRate}, 
+			#{passBy}, 
+			#{updated}, 
+			#{created}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClMortgageEntity">
+		update cl_mortgage 
+		<set>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="descript != null">`descript` = #{descript}, </if>
+			<if test="dyCity != null">`dy_city` = #{dyCity}, </if>
+			<if test="dyAddress != null">`dy_address` = #{dyAddress}, </if>
+			<if test="dyCommunity != null">`dy_community` = #{dyCommunity}, </if>
+			<if test="dyType != null">`dy_type` = #{dyType}, </if>
+			<if test="dyArea != null">`dy_area` = #{dyArea}, </if>
+			<if test="dyBuyYear != null">`dy_buy_year` = #{dyBuyYear}, </if>
+			<if test="dyBuyPrice != null">`dy_buy_price` = #{dyBuyPrice}, </if>
+			<if test="marketValue != null">`market_value` = #{marketValue}, </if>
+			<if test="borrowAmount != null">`borrow_amount` = #{borrowAmount}, </if>
+			<if test="expireDate != null">`expire_date` = #{expireDate}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="halt != null">`halt` = #{halt}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="applyDate != null">`apply_date` = #{applyDate}, </if>
+			<if test="applyby != null">`applyby` = #{applyby}, </if>
+			<if test="realQuota != null">`real_quota` = #{realQuota}, </if>
+			<if test="realRate != null">`real_rate` = #{realRate}, </if>
+			<if test="passBy != null">`pass_by` = #{passBy}, </if>
+			<if test="updated != null">`updated` = #{updated}, </if>
+			<if test="created != null">`created` = #{created}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_mortgage where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_mortgage where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

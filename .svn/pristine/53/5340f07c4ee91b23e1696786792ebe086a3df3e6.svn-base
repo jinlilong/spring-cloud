@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.QrtzLocksDao">
+
+
+    <resultMap type="org.loan.core.domain.QrtzLocksEntity" id="qrtzLocksMap">
+        <result property="schedName" column="SCHED_NAME"/>
+        <result property="lockName" column="LOCK_NAME"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		SCHED_NAME, 
+		LOCK_NAME
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.QrtzLocksEntity" resultMap="qrtzLocksMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_locks
+		where SCHED_NAME = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.QrtzLocksEntity" resultMap="qrtzLocksMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_locks
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by SCHED_NAME desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.QrtzLocksEntity" resultMap="qrtzLocksMap">
+        select
+        <include refid="Base_Column_List" />
+        from qrtz_locks
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from qrtz_locks
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.QrtzLocksEntity">
+		insert into qrtz_locks
+		(
+			`SCHED_NAME`, 
+			`LOCK_NAME`
+		)
+		values
+		(
+			#{schedName}, 
+			#{lockName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.QrtzLocksEntity">
+		update qrtz_locks 
+		<set>
+			<if test="lockName != null">`LOCK_NAME` = #{lockName}</if>
+		</set>
+		where SCHED_NAME = #{schedName}
+	</update>
+	
+	<delete id="delete">
+		delete from qrtz_locks where SCHED_NAME = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from qrtz_locks where SCHED_NAME in 
+		<foreach item="schedName" collection="array" open="(" separator="," close=")">
+			#{schedName}
+		</foreach>
+	</delete>
+
+</mapper>

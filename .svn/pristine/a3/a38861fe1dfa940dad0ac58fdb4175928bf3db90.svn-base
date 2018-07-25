@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.QrtzSimpropTriggersDao">
+
+
+    <resultMap type="org.loan.core.domain.QrtzSimpropTriggersEntity" id="qrtzSimpropTriggersMap">
+        <result property="schedName" column="SCHED_NAME"/>
+        <result property="triggerName" column="TRIGGER_NAME"/>
+        <result property="triggerGroup" column="TRIGGER_GROUP"/>
+        <result property="strProp1" column="STR_PROP_1"/>
+        <result property="strProp2" column="STR_PROP_2"/>
+        <result property="strProp3" column="STR_PROP_3"/>
+        <result property="intProp1" column="INT_PROP_1"/>
+        <result property="intProp2" column="INT_PROP_2"/>
+        <result property="longProp1" column="LONG_PROP_1"/>
+        <result property="longProp2" column="LONG_PROP_2"/>
+        <result property="decProp1" column="DEC_PROP_1"/>
+        <result property="decProp2" column="DEC_PROP_2"/>
+        <result property="boolProp1" column="BOOL_PROP_1"/>
+        <result property="boolProp2" column="BOOL_PROP_2"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		SCHED_NAME, 
+		TRIGGER_NAME, 
+		TRIGGER_GROUP, 
+		STR_PROP_1, 
+		STR_PROP_2, 
+		STR_PROP_3, 
+		INT_PROP_1, 
+		INT_PROP_2, 
+		LONG_PROP_1, 
+		LONG_PROP_2, 
+		DEC_PROP_1, 
+		DEC_PROP_2, 
+		BOOL_PROP_1, 
+		BOOL_PROP_2
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.QrtzSimpropTriggersEntity" resultMap="qrtzSimpropTriggersMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_simprop_triggers
+		where SCHED_NAME = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.QrtzSimpropTriggersEntity" resultMap="qrtzSimpropTriggersMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_simprop_triggers
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by SCHED_NAME desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.QrtzSimpropTriggersEntity" resultMap="qrtzSimpropTriggersMap">
+        select
+        <include refid="Base_Column_List" />
+        from qrtz_simprop_triggers
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from qrtz_simprop_triggers
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.QrtzSimpropTriggersEntity">
+		insert into qrtz_simprop_triggers
+		(
+			`SCHED_NAME`, 
+			`TRIGGER_NAME`, 
+			`TRIGGER_GROUP`, 
+			`STR_PROP_1`, 
+			`STR_PROP_2`, 
+			`STR_PROP_3`, 
+			`INT_PROP_1`, 
+			`INT_PROP_2`, 
+			`LONG_PROP_1`, 
+			`LONG_PROP_2`, 
+			`DEC_PROP_1`, 
+			`DEC_PROP_2`, 
+			`BOOL_PROP_1`, 
+			`BOOL_PROP_2`
+		)
+		values
+		(
+			#{schedName}, 
+			#{triggerName}, 
+			#{triggerGroup}, 
+			#{strProp1}, 
+			#{strProp2}, 
+			#{strProp3}, 
+			#{intProp1}, 
+			#{intProp2}, 
+			#{longProp1}, 
+			#{longProp2}, 
+			#{decProp1}, 
+			#{decProp2}, 
+			#{boolProp1}, 
+			#{boolProp2}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.QrtzSimpropTriggersEntity">
+		update qrtz_simprop_triggers 
+		<set>
+			<if test="triggerName != null">`TRIGGER_NAME` = #{triggerName}, </if>
+			<if test="triggerGroup != null">`TRIGGER_GROUP` = #{triggerGroup}, </if>
+			<if test="strProp1 != null">`STR_PROP_1` = #{strProp1}, </if>
+			<if test="strProp2 != null">`STR_PROP_2` = #{strProp2}, </if>
+			<if test="strProp3 != null">`STR_PROP_3` = #{strProp3}, </if>
+			<if test="intProp1 != null">`INT_PROP_1` = #{intProp1}, </if>
+			<if test="intProp2 != null">`INT_PROP_2` = #{intProp2}, </if>
+			<if test="longProp1 != null">`LONG_PROP_1` = #{longProp1}, </if>
+			<if test="longProp2 != null">`LONG_PROP_2` = #{longProp2}, </if>
+			<if test="decProp1 != null">`DEC_PROP_1` = #{decProp1}, </if>
+			<if test="decProp2 != null">`DEC_PROP_2` = #{decProp2}, </if>
+			<if test="boolProp1 != null">`BOOL_PROP_1` = #{boolProp1}, </if>
+			<if test="boolProp2 != null">`BOOL_PROP_2` = #{boolProp2}</if>
+		</set>
+		where SCHED_NAME = #{schedName}
+	</update>
+	
+	<delete id="delete">
+		delete from qrtz_simprop_triggers where SCHED_NAME = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from qrtz_simprop_triggers where SCHED_NAME in 
+		<foreach item="schedName" collection="array" open="(" separator="," close=")">
+			#{schedName}
+		</foreach>
+	</delete>
+
+</mapper>

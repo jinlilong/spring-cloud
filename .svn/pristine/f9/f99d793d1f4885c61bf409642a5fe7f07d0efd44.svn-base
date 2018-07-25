@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpOrganRoleDao">
+
+
+    <resultMap type="org.loan.core.domain.SpOrganRoleEntity" id="spOrganRoleMap">
+        <result property="organId" column="organ_id"/>
+        <result property="roleId" column="role_id"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		organ_id, 
+		role_id
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpOrganRoleEntity" resultMap="spOrganRoleMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_organ_role
+		where organ_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpOrganRoleEntity" resultMap="spOrganRoleMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_organ_role
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by organ_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpOrganRoleEntity" resultMap="spOrganRoleMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_sys_organ_role
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_sys_organ_role
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpOrganRoleEntity">
+		insert into sp_sys_organ_role
+		(
+			`organ_id`, 
+			`role_id`
+		)
+		values
+		(
+			#{organId}, 
+			#{roleId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpOrganRoleEntity">
+		update sp_sys_organ_role 
+		<set>
+			<if test="roleId != null">`role_id` = #{roleId}</if>
+		</set>
+		where organ_id = #{organId}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_sys_organ_role where organ_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_sys_organ_role where organ_id in 
+		<foreach item="organId" collection="array" open="(" separator="," close=")">
+			#{organId}
+		</foreach>
+	</delete>
+
+</mapper>

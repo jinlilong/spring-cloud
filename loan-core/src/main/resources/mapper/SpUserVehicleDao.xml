@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpUserVehicleDao">
+
+
+    <resultMap type="org.loan.core.domain.SpUserVehicleEntity" id="spUserVehicleMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="vehicleType" column="vehicle_type"/>
+        <result property="vehiclePrice" column="vehicle_price"/>
+        <result property="licenceTime" column="licence_time"/>
+        <result property="manufacturingTime" column="manufacturing_time"/>
+        <result property="kilometer" column="kilometer"/>
+        <result property="mortgage" column="mortgage"/>
+        <result property="courthouseExecute" column="courthouse_execute"/>
+        <result property="creditInfo" column="credit_info"/>
+        <result property="createTiem" column="create_tiem"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		name, 
+		vehicle_type, 
+		vehicle_price, 
+		licence_time, 
+		manufacturing_time, 
+		kilometer, 
+		mortgage, 
+		courthouse_execute, 
+		credit_info, 
+		create_tiem, 
+		update_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpUserVehicleEntity" resultMap="spUserVehicleMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_vehicle
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpUserVehicleEntity" resultMap="spUserVehicleMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_vehicle
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpUserVehicleEntity" resultMap="spUserVehicleMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_user_vehicle
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_user_vehicle
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpUserVehicleEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_user_vehicle
+		(
+			`user_id`, 
+			`name`, 
+			`vehicle_type`, 
+			`vehicle_price`, 
+			`licence_time`, 
+			`manufacturing_time`, 
+			`kilometer`, 
+			`mortgage`, 
+			`courthouse_execute`, 
+			`credit_info`, 
+			`create_tiem`, 
+			`update_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{name}, 
+			#{vehicleType}, 
+			#{vehiclePrice}, 
+			#{licenceTime}, 
+			#{manufacturingTime}, 
+			#{kilometer}, 
+			#{mortgage}, 
+			#{courthouseExecute}, 
+			#{creditInfo}, 
+			#{createTiem}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpUserVehicleEntity">
+		update sp_user_vehicle 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="vehicleType != null">`vehicle_type` = #{vehicleType}, </if>
+			<if test="vehiclePrice != null">`vehicle_price` = #{vehiclePrice}, </if>
+			<if test="licenceTime != null">`licence_time` = #{licenceTime}, </if>
+			<if test="manufacturingTime != null">`manufacturing_time` = #{manufacturingTime}, </if>
+			<if test="kilometer != null">`kilometer` = #{kilometer}, </if>
+			<if test="mortgage != null">`mortgage` = #{mortgage}, </if>
+			<if test="courthouseExecute != null">`courthouse_execute` = #{courthouseExecute}, </if>
+			<if test="creditInfo != null">`credit_info` = #{creditInfo}, </if>
+			<if test="createTiem != null">`create_tiem` = #{createTiem}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_user_vehicle where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_user_vehicle where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

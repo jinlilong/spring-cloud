@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClSmsDao">
+
+
+    <resultMap type="org.loan.core.domain.ClSmsEntity" id="clSmsMap">
+        <result property="id" column="id"/>
+        <result property="phone" column="phone"/>
+        <result property="sendTime" column="send_time"/>
+        <result property="content" column="content"/>
+        <result property="respTime" column="resp_time"/>
+        <result property="resp" column="resp"/>
+        <result property="smsType" column="sms_type"/>
+        <result property="code" column="code"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="state" column="state"/>
+        <result property="verifyTime" column="verify_time"/>
+		<result property="sendContent" column="sendContent"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		phone, 
+		send_time, 
+		content, 
+		resp_time, 
+		resp, 
+		sms_type, 
+		code, 
+		order_no, 
+		state, 
+		verify_time,
+		sendContent
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClSmsEntity" resultMap="clSmsMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_sms
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClSmsEntity" resultMap="clSmsMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_sms
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClSmsEntity" resultMap="clSmsMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_sms
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_sms
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClSmsEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_sms
+		(
+			`phone`, 
+			`send_time`, 
+			`content`, 
+			`resp_time`, 
+			`resp`, 
+			`sms_type`, 
+			`code`, 
+			`order_no`, 
+			`state`, 
+			`verify_time`,
+			sendContent
+		)
+		values
+		(
+			#{phone}, 
+			#{sendTime}, 
+			#{content}, 
+			#{respTime}, 
+			#{resp}, 
+			#{smsType}, 
+			#{code}, 
+			#{orderNo}, 
+			#{state}, 
+			#{verifyTime},
+			#{sendContent}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClSmsEntity">
+		update cl_sms 
+		<set>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="sendTime != null">`send_time` = #{sendTime}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="respTime != null">`resp_time` = #{respTime}, </if>
+			<if test="resp != null">`resp` = #{resp}, </if>
+			<if test="smsType != null">`sms_type` = #{smsType}, </if>
+			<if test="code != null">`code` = #{code}, </if>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="verifyTime != null">`verify_time` = #{verifyTime},</if>
+			<if test="sendContent != null">`sendContent` = #{sendContent}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_sms where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_sms where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<!-- 查询最新的一条 -->
+	<select id="findTimeMsg" resultType="org.loan.core.domain.ClSmsEntity" resultMap="clSmsMap" parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_sms WHERE phone = #{phone,jdbcType=VARCHAR} AND sms_type = #{smsType, jdbcType = VARCHAR} order by send_time desc limit 1
+	</select>
+</mapper>

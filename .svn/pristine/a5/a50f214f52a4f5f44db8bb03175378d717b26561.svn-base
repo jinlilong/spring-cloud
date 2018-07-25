@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpUserFamilyDao">
+
+
+    <resultMap type="org.loan.core.domain.SpUserFamilyEntity" id="spUserFamilyMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="livingConditions" column="living_conditions"/>
+        <result property="houseProperty" column="house_property"/>
+        <result property="housingLoan" column="housing_loan"/>
+        <result property="socialSecurity" column="social_security"/>
+        <result property="tenementTime" column="tenement_time"/>
+        <result property="localTime" column="local_time"/>
+        <result property="accumulationFund" column="accumulation_fund"/>
+        <result property="monthRent" column="month_rent"/>
+        <result property="repaymentMethod" column="repayment_method"/>
+        <result property="childrenNumber" column="children_number"/>
+        <result property="annualIncome" column="annual_income"/>
+        <result property="otherIncome" column="other_income"/>
+        <result property="otherAssets" column="other_assets"/>
+        <result property="value" column="value"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		living_conditions, 
+		house_property, 
+		housing_loan, 
+		social_security, 
+		tenement_time, 
+		local_time, 
+		accumulation_fund, 
+		month_rent, 
+		repayment_method, 
+		children_number, 
+		annual_income, 
+		other_income, 
+		other_assets, 
+		value
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpUserFamilyEntity" resultMap="spUserFamilyMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_family
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpUserFamilyEntity" resultMap="spUserFamilyMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_family
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpUserFamilyEntity" resultMap="spUserFamilyMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_user_family
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_user_family
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpUserFamilyEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_user_family
+		(
+			`user_id`, 
+			`living_conditions`, 
+			`house_property`, 
+			`housing_loan`, 
+			`social_security`, 
+			`tenement_time`, 
+			`local_time`, 
+			`accumulation_fund`, 
+			`month_rent`, 
+			`repayment_method`, 
+			`children_number`, 
+			`annual_income`, 
+			`other_income`, 
+			`other_assets`, 
+			`value`
+		)
+		values
+		(
+			#{userId}, 
+			#{livingConditions}, 
+			#{houseProperty}, 
+			#{housingLoan}, 
+			#{socialSecurity}, 
+			#{tenementTime}, 
+			#{localTime}, 
+			#{accumulationFund}, 
+			#{monthRent}, 
+			#{repaymentMethod}, 
+			#{childrenNumber}, 
+			#{annualIncome}, 
+			#{otherIncome}, 
+			#{otherAssets}, 
+			#{value}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpUserFamilyEntity">
+		update sp_user_family 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="livingConditions != null">`living_conditions` = #{livingConditions}, </if>
+			<if test="houseProperty != null">`house_property` = #{houseProperty}, </if>
+			<if test="housingLoan != null">`housing_loan` = #{housingLoan}, </if>
+			<if test="socialSecurity != null">`social_security` = #{socialSecurity}, </if>
+			<if test="tenementTime != null">`tenement_time` = #{tenementTime}, </if>
+			<if test="localTime != null">`local_time` = #{localTime}, </if>
+			<if test="accumulationFund != null">`accumulation_fund` = #{accumulationFund}, </if>
+			<if test="monthRent != null">`month_rent` = #{monthRent}, </if>
+			<if test="repaymentMethod != null">`repayment_method` = #{repaymentMethod}, </if>
+			<if test="childrenNumber != null">`children_number` = #{childrenNumber}, </if>
+			<if test="annualIncome != null">`annual_income` = #{annualIncome}, </if>
+			<if test="otherIncome != null">`other_income` = #{otherIncome}, </if>
+			<if test="otherAssets != null">`other_assets` = #{otherAssets}, </if>
+			<if test="value != null">`value` = #{value}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_user_family where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_user_family where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

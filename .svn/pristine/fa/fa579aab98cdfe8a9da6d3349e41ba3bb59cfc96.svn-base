@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.BestSignUsersDao">
+
+
+    <resultMap type="org.loan.core.domain.BestSignUsersEntity" id="bestSignUsersMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="idno" column="idno"/>
+        <result property="name" column="name"/>
+        <result property="certid" column="certId"/>
+        <result property="certtype" column="certType"/>
+        <result property="signImage" column="sign_image"/>
+        <result property="state" column="state"/>
+        <result property="created" column="created"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		idno, 
+		name, 
+		certId, 
+		certType, 
+		sign_image, 
+		state, 
+		created
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.BestSignUsersEntity" resultMap="bestSignUsersMap">
+		select
+		<include refid="Base_Column_List" />
+		from best_sign_users
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.BestSignUsersEntity" resultMap="bestSignUsersMap">
+		select
+		<include refid="Base_Column_List" />
+		from best_sign_users
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.BestSignUsersEntity" resultMap="bestSignUsersMap">
+        select
+        <include refid="Base_Column_List" />
+        from best_sign_users
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from best_sign_users
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.BestSignUsersEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into best_sign_users
+		(
+			`user_id`, 
+			`idno`, 
+			`name`, 
+			`certId`, 
+			`certType`, 
+			`sign_image`, 
+			`state`, 
+			`created`
+		)
+		values
+		(
+			#{userId}, 
+			#{idno}, 
+			#{name}, 
+			#{certid}, 
+			#{certtype}, 
+			#{signImage}, 
+			#{state}, 
+			#{created}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.BestSignUsersEntity">
+		update best_sign_users 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="idno != null">`idno` = #{idno}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="certid != null">`certId` = #{certid}, </if>
+			<if test="certtype != null">`certType` = #{certtype}, </if>
+			<if test="signImage != null">`sign_image` = #{signImage}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="created != null">`created` = #{created}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from best_sign_users where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from best_sign_users where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

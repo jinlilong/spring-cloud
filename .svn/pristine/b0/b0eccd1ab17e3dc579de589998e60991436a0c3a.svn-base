@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClUserDao">
+
+
+    <resultMap type="org.loan.core.domain.ClUserEntity" id="ClUserEntityMap">
+        <result property="id" column="id"/>
+        <result property="uuid" column="uuid"/>
+        <result property="cat" column="cat"/>
+        <result property="loginName" column="login_name"/>
+        <result property="loginPwd" column="login_pwd"/>
+        <result property="loginpwdModifyTime" column="loginpwd_modify_time"/>
+        <result property="registTime" column="regist_time"/>
+        <result property="registerClient" column="register_client"/>
+        <result property="tradePwd" column="trade_pwd"/>
+        <result property="tradepwdModifyTime" column="tradepwd_modify_time"/>
+        <result property="invitationCode" column="invitation_code"/>
+        <result property="channelId" column="channel_id"/>
+        <result property="mktId" column="mkt_id"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="isLogin" column="is_login"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="addId" column="add_id"/>
+		<result property="workNumber" column="work_number"/>
+        <result property="mortgageType" column="mortgage_type"/>
+        <result property="cwRemark" column="cw_remark"/>
+		<result property="passRisk" column="pass_risk"/>
+		<result property="rejectedRemark" column="rejected_remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		uuid, 
+		cat, 
+		login_name, 
+		login_pwd, 
+		loginpwd_modify_time, 
+		regist_time, 
+		register_client, 
+		trade_pwd, 
+		tradepwd_modify_time, 
+		invitation_code, 
+		channel_id, 
+		mkt_id, 
+		login_time, 
+		is_login, 
+		organ_code, 
+		add_id,
+		work_number,
+		mortgage_type, 
+		cw_remark,
+		pass_risk,
+		rejected_remark
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClUserEntity" resultMap="ClUserEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user
+		where id = #{value}
+	</select>
+	
+	
+	<select id="queryUser" resultType="org.loan.core.domain.ClUserEntity" resultMap="ClUserEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user
+		where login_name=#{0}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClUserEntity" resultMap="ClUserEntityMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user
+        
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_user
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClUserEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_user
+		(
+			`uuid`, 
+			`cat`, 
+			`login_name`, 
+			`login_pwd`, 
+			`loginpwd_modify_time`, 
+			`regist_time`, 
+			`register_client`, 
+			`trade_pwd`, 
+			`tradepwd_modify_time`, 
+			`invitation_code`, 
+			`channel_id`, 
+			`mkt_id`, 
+			`login_time`, 
+			`is_login`, 
+			`organ_code`, 
+			`add_id`,
+			`work_number`,
+			`mortgage_type`, 
+			`cw_remark`,
+			`pass_risk`,
+			`rejected_remark`
+		)
+		values
+		(
+			#{uuid}, 
+			#{cat}, 
+			#{loginName}, 
+			#{loginPwd}, 
+			#{loginpwdModifyTime}, 
+			#{registTime}, 
+			#{registerClient}, 
+			#{tradePwd}, 
+			#{tradepwdModifyTime}, 
+			#{invitationCode}, 
+			#{channelId}, 
+			#{mktId}, 
+			#{loginTime}, 
+			#{isLogin}, 
+			#{organCode}, 
+			#{addId},
+			#{workNumber},
+			#{mortgageType}, 
+			#{cwRemark},
+			#{passRisk},
+			#{rejectedRemark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClUserEntity">
+		update cl_user 
+		<set>
+			<if test="uuid != null">`uuid` = #{uuid}, </if>
+			<if test="cat != null">`cat` = #{cat}, </if>
+			<if test="loginName != null">`login_name` = #{loginName}, </if>
+			<if test="loginPwd != null">`login_pwd` = #{loginPwd}, </if>
+			<if test="loginpwdModifyTime != null">`loginpwd_modify_time` = #{loginpwdModifyTime}, </if>
+			<if test="registTime != null">`regist_time` = #{registTime}, </if>
+			<if test="registerClient != null">`register_client` = #{registerClient}, </if>
+			<if test="tradePwd != null">`trade_pwd` = #{tradePwd}, </if>
+			<if test="tradepwdModifyTime != null">`tradepwd_modify_time` = #{tradepwdModifyTime}, </if>
+			<if test="invitationCode != null">`invitation_code` = #{invitationCode}, </if>
+			<if test="channelId != null">`channel_id` = #{channelId}, </if>
+			<if test="mktId != null">`mkt_id` = #{mktId}, </if>
+			<if test="loginTime != null">`login_time` = #{loginTime}, </if>
+			<if test="isLogin != null">`is_login` = #{isLogin}, </if>
+			<if test="organCode != null">`organ_code` = #{organCode}, </if>
+			<if test="addId != null">`add_id` = #{addId},</if>
+			<if test="workNumber != null">`work_number` = #{workNumber}, </if>
+			<if test="mortgageType != null">`mortgage_type` = #{mortgageType}, </if>
+			<if test="cwRemark != null">`cw_remark` = #{cwRemark},</if>
+			<if test="passRisk != null">`pass_risk` = #{passRisk},</if>
+			<if test="rejectedRemark != null">`rejected_remark` = #{rejectedRemark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_user where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

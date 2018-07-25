@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpProcessDao">
+
+
+    <resultMap type="org.loan.core.domain.SpProcessEntity" id="spProcessMap">
+        <result property="id" column="id"/>
+        <result property="tId" column="t_id"/>
+        <result property="tType" column="t_type"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="cretator" column="cretator"/>
+        <result property="cretatorId" column="cretator_id"/>
+        <result property="remark" column="remark"/>
+        <result property="processType" column="process_type"/>
+        <result property="processName" column="process_name"/>
+        <result property="modifier" column="modifier"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		t_id, 
+		t_type, 
+		status, 
+		create_time, 
+		update_time, 
+		cretator, 
+		cretator_id, 
+		remark, 
+		process_type, 
+		process_name, 
+		modifier
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpProcessEntity" resultMap="spProcessMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_process
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpProcessEntity" resultMap="spProcessMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_process
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpProcessEntity" resultMap="spProcessMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_process
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_process
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpProcessEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_process
+		(
+			`t_id`, 
+			`t_type`, 
+			`status`, 
+			`create_time`, 
+			`update_time`, 
+			`cretator`, 
+			`cretator_id`, 
+			`remark`, 
+			`process_type`, 
+			`process_name`, 
+			`modifier`
+		)
+		values
+		(
+			#{tId}, 
+			#{tType}, 
+			#{status}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{cretator}, 
+			#{cretatorId}, 
+			#{remark}, 
+			#{processType}, 
+			#{processName}, 
+			#{modifier}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpProcessEntity">
+		update sp_process 
+		<set>
+			<if test="tId != null">`t_id` = #{tId}, </if>
+			<if test="tType != null">`t_type` = #{tType}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="cretator != null">`cretator` = #{cretator}, </if>
+			<if test="cretatorId != null">`cretator_id` = #{cretatorId}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="processType != null">`process_type` = #{processType}, </if>
+			<if test="processName != null">`process_name` = #{processName}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_process where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_process where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

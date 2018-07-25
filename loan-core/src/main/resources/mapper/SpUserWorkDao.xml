@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpUserWorkDao">
+
+
+    <resultMap type="org.loan.core.domain.SpUserWorkEntity" id="spUserWorkMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="company" column="company"/>
+        <result property="companyType" column="company_type"/>
+        <result property="companyPhone" column="company_phone"/>
+        <result property="companyScale" column="company_scale"/>
+        <result property="companyAddress" column="company_address"/>
+        <result property="monthlyIncome" column="monthly_income"/>
+        <result property="salaryForm" column="salary_form"/>
+        <result property="tradeType" column="trade_type"/>
+        <result property="position" column="position"/>
+        <result property="hiredate" column="hiredate"/>
+        <result property="department" column="department"/>
+        <result property="createTiem" column="create_tiem"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		company, 
+		company_type, 
+		company_phone, 
+		company_scale, 
+		company_address, 
+		monthly_income, 
+		salary_form, 
+		trade_type, 
+		position, 
+		hiredate, 
+		department, 
+		create_tiem, 
+		update_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpUserWorkEntity" resultMap="spUserWorkMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_work
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpUserWorkEntity" resultMap="spUserWorkMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_work
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpUserWorkEntity" resultMap="spUserWorkMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_user_work
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_user_work
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpUserWorkEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_user_work
+		(
+			`user_id`, 
+			`company`, 
+			`company_type`, 
+			`company_phone`, 
+			`company_scale`, 
+			`company_address`, 
+			`monthly_income`, 
+			`salary_form`, 
+			`trade_type`, 
+			`position`, 
+			`hiredate`, 
+			`department`, 
+			`create_tiem`, 
+			`update_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{company}, 
+			#{companyType}, 
+			#{companyPhone}, 
+			#{companyScale}, 
+			#{companyAddress}, 
+			#{monthlyIncome}, 
+			#{salaryForm}, 
+			#{tradeType}, 
+			#{position}, 
+			#{hiredate}, 
+			#{department}, 
+			#{createTiem}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpUserWorkEntity">
+		update sp_user_work 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="company != null">`company` = #{company}, </if>
+			<if test="companyType != null">`company_type` = #{companyType}, </if>
+			<if test="companyPhone != null">`company_phone` = #{companyPhone}, </if>
+			<if test="companyScale != null">`company_scale` = #{companyScale}, </if>
+			<if test="companyAddress != null">`company_address` = #{companyAddress}, </if>
+			<if test="monthlyIncome != null">`monthly_income` = #{monthlyIncome}, </if>
+			<if test="salaryForm != null">`salary_form` = #{salaryForm}, </if>
+			<if test="tradeType != null">`trade_type` = #{tradeType}, </if>
+			<if test="position != null">`position` = #{position}, </if>
+			<if test="hiredate != null">`hiredate` = #{hiredate}, </if>
+			<if test="department != null">`department` = #{department}, </if>
+			<if test="createTiem != null">`create_tiem` = #{createTiem}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_user_work where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_user_work where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

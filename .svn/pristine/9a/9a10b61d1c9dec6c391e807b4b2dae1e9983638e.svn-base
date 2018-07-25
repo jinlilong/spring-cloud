@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClBankCardDao">
+
+
+    <resultMap type="org.loan.core.domain.ClBankCardEntity" id="clBankCardMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="payCode" column="pay_code"/>
+        <result property="bank" column="bank"/>
+        <result property="bankCode" column="bank_code"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="phone" column="phone"/>
+        <result property="agreeNo" column="agree_no"/>
+        <result property="bindTime" column="bind_time"/>
+        <result property="cityCode" column="city_code"/>
+        <result property="protocolNo" column="protocol_no"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		pay_code, 
+		bank, 
+		bank_code, 
+		card_no, 
+		phone, 
+		agree_no, 
+		bind_time,
+		city_code,
+		protocol_no
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClBankCardEntity" resultMap="clBankCardMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_bank_card
+		where id = #{value}
+	</select>
+	
+	
+	
+
+	<select id="queryList" resultType="org.loan.core.domain.ClBankCardEntity" resultMap="clBankCardMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_bank_card
+		<where>
+			<if test="userId!=null">
+				user_id=#{userId}
+			</if>
+			<if test="payCode!=null and payCode!=''">
+				pay_code=#{payCode}
+			</if>
+		</where>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	
+	
+
+    
+	<insert id="save" parameterType="org.loan.core.domain.ClBankCardEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_bank_card
+		(
+			`user_id`, 
+			`pay_code`, 
+			`bank`, 
+			`bank_code`, 
+			`card_no`, 
+			`phone`, 
+			`agree_no`, 
+			`bind_time`,
+			`city_code`,
+			`protocol_no`
+		)
+		values
+		(
+			#{userId}, 
+			#{payCode}, 
+			#{bank}, 
+			#{bankCode}, 
+			#{cardNo}, 
+			#{phone}, 
+			#{agreeNo}, 
+			#{bindTime},
+			#{cityCode},
+			#{protocolNo}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClBankCardEntity">
+		update cl_bank_card 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="payCode != null">`pay_code` = #{payCode}, </if>
+			<if test="bank != null">`bank` = #{bank}, </if>
+			<if test="bankCode != null">`bank_code` = #{bankCode}, </if>
+			<if test="cardNo != null">`card_no` = #{cardNo}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="agreeNo != null">`agree_no` = #{agreeNo}, </if>
+			<if test="bindTime != null">`bind_time` = #{bindTime},</if>
+			<if test="cityCode != null">`city_code` = #{cityCode},</if>
+			<if test="protocolNo != null">`protocol_no` = #{protocolNo}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_bank_card where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_bank_card where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<!-- 根据用户ID查询绑卡信息 -->
+	<select id="queryByClUserId"  resultType="org.loan.core.domain.ClBankCardEntity" resultMap="clBankCardMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_bank_card
+		where user_id = #{0}
+	</select>
+</mapper>

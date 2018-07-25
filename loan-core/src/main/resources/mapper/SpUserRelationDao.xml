@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpUserRelationDao">
+
+
+    <resultMap type="org.loan.core.domain.SpUserRelationEntity" id="spUserRelationMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="relation" column="relation"/>
+        <result property="telephone" column="telephone"/>
+        <result property="phone" column="phone"/>
+        <result property="createTiem" column="create_tiem"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		name, 
+		relation, 
+		telephone, 
+		phone, 
+		create_tiem, 
+		update_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpUserRelationEntity" resultMap="spUserRelationMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_relation
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpUserRelationEntity" resultMap="spUserRelationMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_relation
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpUserRelationEntity" resultMap="spUserRelationMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_user_relation
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_user_relation
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpUserRelationEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_user_relation
+		(
+			`user_id`, 
+			`name`, 
+			`relation`, 
+			`telephone`, 
+			`phone`, 
+			`create_tiem`, 
+			`update_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{name}, 
+			#{relation}, 
+			#{telephone}, 
+			#{phone}, 
+			#{createTiem}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpUserRelationEntity">
+		update sp_user_relation 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="relation != null">`relation` = #{relation}, </if>
+			<if test="telephone != null">`telephone` = #{telephone}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="createTiem != null">`create_tiem` = #{createTiem}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_user_relation where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_user_relation where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

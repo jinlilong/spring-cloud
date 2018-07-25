@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.QrtzJobDetailsDao">
+
+
+    <resultMap type="org.loan.core.domain.QrtzJobDetailsEntity" id="qrtzJobDetailsMap">
+        <result property="schedName" column="SCHED_NAME"/>
+        <result property="jobName" column="JOB_NAME"/>
+        <result property="jobGroup" column="JOB_GROUP"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="jobClassName" column="JOB_CLASS_NAME"/>
+        <result property="isDurable" column="IS_DURABLE"/>
+        <result property="isNonconcurrent" column="IS_NONCONCURRENT"/>
+        <result property="isUpdateData" column="IS_UPDATE_DATA"/>
+        <result property="requestsRecovery" column="REQUESTS_RECOVERY"/>
+        <result property="jobData" column="JOB_DATA"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		SCHED_NAME, 
+		JOB_NAME, 
+		JOB_GROUP, 
+		DESCRIPTION, 
+		JOB_CLASS_NAME, 
+		IS_DURABLE, 
+		IS_NONCONCURRENT, 
+		IS_UPDATE_DATA, 
+		REQUESTS_RECOVERY, 
+		JOB_DATA
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.QrtzJobDetailsEntity" resultMap="qrtzJobDetailsMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_job_details
+		where SCHED_NAME = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.QrtzJobDetailsEntity" resultMap="qrtzJobDetailsMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_job_details
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by SCHED_NAME desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.QrtzJobDetailsEntity" resultMap="qrtzJobDetailsMap">
+        select
+        <include refid="Base_Column_List" />
+        from qrtz_job_details
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from qrtz_job_details
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.QrtzJobDetailsEntity">
+		insert into qrtz_job_details
+		(
+			`SCHED_NAME`, 
+			`JOB_NAME`, 
+			`JOB_GROUP`, 
+			`DESCRIPTION`, 
+			`JOB_CLASS_NAME`, 
+			`IS_DURABLE`, 
+			`IS_NONCONCURRENT`, 
+			`IS_UPDATE_DATA`, 
+			`REQUESTS_RECOVERY`, 
+			`JOB_DATA`
+		)
+		values
+		(
+			#{schedName}, 
+			#{jobName}, 
+			#{jobGroup}, 
+			#{description}, 
+			#{jobClassName}, 
+			#{isDurable}, 
+			#{isNonconcurrent}, 
+			#{isUpdateData}, 
+			#{requestsRecovery}, 
+			#{jobData}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.QrtzJobDetailsEntity">
+		update qrtz_job_details 
+		<set>
+			<if test="jobName != null">`JOB_NAME` = #{jobName}, </if>
+			<if test="jobGroup != null">`JOB_GROUP` = #{jobGroup}, </if>
+			<if test="description != null">`DESCRIPTION` = #{description}, </if>
+			<if test="jobClassName != null">`JOB_CLASS_NAME` = #{jobClassName}, </if>
+			<if test="isDurable != null">`IS_DURABLE` = #{isDurable}, </if>
+			<if test="isNonconcurrent != null">`IS_NONCONCURRENT` = #{isNonconcurrent}, </if>
+			<if test="isUpdateData != null">`IS_UPDATE_DATA` = #{isUpdateData}, </if>
+			<if test="requestsRecovery != null">`REQUESTS_RECOVERY` = #{requestsRecovery}, </if>
+			<if test="jobData != null">`JOB_DATA` = #{jobData}</if>
+		</set>
+		where SCHED_NAME = #{schedName}
+	</update>
+	
+	<delete id="delete">
+		delete from qrtz_job_details where SCHED_NAME = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from qrtz_job_details where SCHED_NAME in 
+		<foreach item="schedName" collection="array" open="(" separator="," close=")">
+			#{schedName}
+		</foreach>
+	</delete>
+
+</mapper>

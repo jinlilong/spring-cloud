@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClQuartzInfoDao">
+
+
+    <resultMap type="org.loan.core.domain.ClQuartzInfoEntity" id="clQuartzInfoMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <result property="cycle" column="cycle"/>
+        <result property="className" column="class_name"/>
+        <result property="succeed" column="succeed"/>
+        <result property="fail" column="fail"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		name, 
+		code, 
+		cycle, 
+		class_name, 
+		succeed, 
+		fail, 
+		state, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClQuartzInfoEntity" resultMap="clQuartzInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_quartz_info
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClQuartzInfoEntity" resultMap="clQuartzInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_quartz_info
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClQuartzInfoEntity" resultMap="clQuartzInfoMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_quartz_info
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_quartz_info
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClQuartzInfoEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_quartz_info
+		(
+			`name`, 
+			`code`, 
+			`cycle`, 
+			`class_name`, 
+			`succeed`, 
+			`fail`, 
+			`state`, 
+			`create_time`
+		)
+		values
+		(
+			#{name}, 
+			#{code}, 
+			#{cycle}, 
+			#{className}, 
+			#{succeed}, 
+			#{fail}, 
+			#{state}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClQuartzInfoEntity">
+		update cl_quartz_info 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="code != null">`code` = #{code}, </if>
+			<if test="cycle != null">`cycle` = #{cycle}, </if>
+			<if test="className != null">`class_name` = #{className}, </if>
+			<if test="succeed != null">`succeed` = #{succeed}, </if>
+			<if test="fail != null">`fail` = #{fail}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_quartz_info where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_quartz_info where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

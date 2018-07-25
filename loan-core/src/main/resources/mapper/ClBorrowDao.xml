@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClBorrowDao">
+
+
+    <resultMap type="org.loan.core.domain.ClBorrowEntity" id="clBorrowMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="mobile" column="mobile"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="borrowType" column="borrow_type"/>
+        <result property="mid" column="mid"/>
+        <result property="amount" column="amount"/>
+        <result property="realAmount" column="real_amount"/>
+        <result property="fee" column="fee"/>
+        <result property="periods" column="periods"/>
+        <result property="createTime" column="create_time"/>
+        <result property="timeLimit" column="time_limit"/>
+        <result property="state" column="state"/>
+        <result property="expireTime" column="expire_time"/>
+        <result property="isnotify" column="isnotify"/>
+        <result property="cardId" column="card_id"/>
+        <result property="serviceFee" column="service_fee"/>
+        <result property="flowFee" column="flow_fee"/>
+        <result property="infoAuthFee" column="info_auth_fee"/>
+        <result property="scenes" column="scenes"/>
+        <result property="interest" column="interest"/>
+        <result property="rate" column="rate"/>
+        <result property="client" column="client"/>
+        <result property="address" column="address"/>
+        <result property="coordinate" column="coordinate"/>
+        <result property="remark" column="remark"/>
+        <result property="loanTime" column="loan_time"/>
+        <result property="ip" column="ip"/>
+        <result property="contractId" column="contract_id"/>
+        <result property="overdueTime" column="overdue_time"/>
+        <result property="repaymentMethod" column="repayment_method"/>
+        <result property="isOnline" column="is_online"/>
+        <result property="projectId" column="projectId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		name, 
+		mobile, 
+		order_no, 
+		borrow_type, 
+		mid, 
+		amount, 
+		real_amount, 
+		fee, 
+		periods, 
+		create_time, 
+		time_limit, 
+		state, 
+		expire_time, 
+		isnotify, 
+		card_id, 
+		service_fee, 
+		flow_fee, 
+		info_auth_fee, 
+		scenes, 
+		interest, 
+		rate, 
+		client, 
+		address, 
+		coordinate, 
+		remark, 
+		loan_time, 
+		ip, 
+		contract_id, 
+		overdue_time, 
+		repayment_method,
+		is_online,
+		projectId
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClBorrowEntity" resultMap="clBorrowMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow
+		where id = #{value}
+	</select>
+	
+	<!-- 查询用户Id查询合同最大序列号 -->
+	<select id="queryMaxContractNum" resultType="java.lang.Integer">
+		select max(contract_num) from cl_borrow where user_id=#{0}
+	</select>
+	
+	
+	
+	<select id="queryBorrowCountNum" resultType="java.lang.Integer">
+		select count(1) from cl_borrow where user_id=#{0}
+	</select>
+	
+	
+	
+	
+	
+	<!-- 查询用户单日借款金额 -->
+	<select id="queryUserDayBorrowAmount" resultType="java.math.BigDecimal">
+		select sum(real_amount) from cl_borrow where user_id=#{userId} and create_time between #{startDate} and #{endDate} and state in ('30','40','50')
+	</select>
+	
+	
+	
+	<select id="queryByOrderNo" resultType="org.loan.core.domain.ClBorrowEntity" resultMap="clBorrowMap"> 
+		select 
+		<include refid="Base_Column_List" />
+		from cl_borrow
+		where order_no=#{orderNo}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClBorrowEntity" resultMap="clBorrowMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow
+        
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClBorrowEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_borrow
+		(
+			`user_id`, 
+			`name`, 
+			`mobile`, 
+			`order_no`, 
+			`borrow_type`, 
+			`mid`, 
+			`amount`, 
+			`real_amount`, 
+			`fee`, 
+			`periods`, 
+			`create_time`, 
+			`time_limit`, 
+			`state`, 
+			`expire_time`, 
+			`isnotify`, 
+			`card_id`, 
+			`service_fee`, 
+			`flow_fee`, 
+			`info_auth_fee`, 
+			`scenes`, 
+			`interest`, 
+			`rate`, 
+			`client`, 
+			`address`, 
+			`coordinate`, 
+			`remark`, 
+			`loan_time`, 
+			`ip`, 
+			`contract_id`, 
+			`overdue_time`, 
+			`repayment_method`,
+			`is_online`,
+			`projectId`
+		)
+		values
+		(
+			#{userId}, 
+			#{name}, 
+			#{mobile}, 
+			#{orderNo}, 
+			#{borrowType}, 
+			#{mid}, 
+			#{amount}, 
+			#{realAmount}, 
+			#{fee}, 
+			#{periods}, 
+			#{createTime}, 
+			#{timeLimit}, 
+			#{state}, 
+			#{expireTime}, 
+			#{isnotify}, 
+			#{cardId}, 
+			#{serviceFee}, 
+			#{flowFee}, 
+			#{infoAuthFee}, 
+			#{scenes}, 
+			#{interest}, 
+			#{rate}, 
+			#{client}, 
+			#{address}, 
+			#{coordinate}, 
+			#{remark}, 
+			#{loanTime}, 
+			#{ip}, 
+			#{contractId}, 
+			#{overdueTime}, 
+			#{repaymentMethod},
+			#{isOnline},
+			#{projectId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClBorrowEntity">
+		update cl_borrow 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="borrowType != null">`borrow_type` = #{borrowType}, </if>
+			<if test="mid != null">`mid` = #{mid}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
+			<if test="realAmount != null">`real_amount` = #{realAmount}, </if>
+			<if test="fee != null">`fee` = #{fee}, </if>
+			<if test="periods != null">`periods` = #{periods}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="timeLimit != null">`time_limit` = #{timeLimit}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="expireTime != null">`expire_time` = #{expireTime}, </if>
+			<if test="isnotify != null">`isnotify` = #{isnotify}, </if>
+			<if test="cardId != null">`card_id` = #{cardId}, </if>
+			<if test="serviceFee != null">`service_fee` = #{serviceFee}, </if>
+			<if test="flowFee != null">`flow_fee` = #{flowFee}, </if>
+			<if test="infoAuthFee != null">`info_auth_fee` = #{infoAuthFee}, </if>
+			<if test="scenes != null">`scenes` = #{scenes}, </if>
+			<if test="interest != null">`interest` = #{interest}, </if>
+			<if test="rate != null">`rate` = #{rate}, </if>
+			<if test="client != null">`client` = #{client}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="coordinate != null">`coordinate` = #{coordinate}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="loanTime != null">`loan_time` = #{loanTime}, </if>
+			<if test="ip != null">`ip` = #{ip}, </if>
+			<if test="contractId != null">`contract_id` = #{contractId}, </if>
+			<if test="overdueTime != null">`overdue_time` = #{overdueTime}, </if>
+			<if test="repaymentMethod != null">`repayment_method` = #{repaymentMethod},</if>
+			<if test="isOnline != null">`is_online` = #{isOnline},</if>
+			<if test="projectId != null">`projectId` = #{projectId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_borrow where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_borrow where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClOpinionDao">
+
+
+    <resultMap type="org.loan.core.domain.ClOpinionEntity" id="clOpinionMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="opinion" column="opinion"/>
+        <result property="sysUserId" column="sys_user_id"/>
+        <result property="feedback" column="feedback"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="confirmTime" column="confirm_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		opinion, 
+		sys_user_id, 
+		feedback, 
+		state, 
+		create_time, 
+		confirm_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClOpinionEntity" resultMap="clOpinionMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_opinion
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClOpinionEntity" resultMap="clOpinionMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_opinion
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClOpinionEntity" resultMap="clOpinionMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_opinion
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_opinion
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClOpinionEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_opinion
+		(
+			`user_id`, 
+			`opinion`, 
+			`sys_user_id`, 
+			`feedback`, 
+			`state`, 
+			`create_time`, 
+			`confirm_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{opinion}, 
+			#{sysUserId}, 
+			#{feedback}, 
+			#{state}, 
+			#{createTime}, 
+			#{confirmTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClOpinionEntity">
+		update cl_opinion 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="opinion != null">`opinion` = #{opinion}, </if>
+			<if test="sysUserId != null">`sys_user_id` = #{sysUserId}, </if>
+			<if test="feedback != null">`feedback` = #{feedback}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="confirmTime != null">`confirm_time` = #{confirmTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_opinion where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_opinion where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

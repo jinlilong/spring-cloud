@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpUserHouseDao">
+
+
+    <resultMap type="org.loan.core.domain.SpUserHouseEntity" id="spUserHouseMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="propertySituation" column="property_situation"/>
+        <result property="houseAddress" column="house_address"/>
+        <result property="buyTime" column="buy_time"/>
+        <result property="buyType" column="buy_type"/>
+        <result property="buyPrice" column="buy_price"/>
+        <result property="payments" column="payments"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		property_situation, 
+		house_address, 
+		buy_time, 
+		buy_type, 
+		buy_price, 
+		payments
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpUserHouseEntity" resultMap="spUserHouseMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_house
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpUserHouseEntity" resultMap="spUserHouseMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_house
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpUserHouseEntity" resultMap="spUserHouseMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_user_house
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_user_house
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpUserHouseEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_user_house
+		(
+			`user_id`, 
+			`property_situation`, 
+			`house_address`, 
+			`buy_time`, 
+			`buy_type`, 
+			`buy_price`, 
+			`payments`
+		)
+		values
+		(
+			#{userId}, 
+			#{propertySituation}, 
+			#{houseAddress}, 
+			#{buyTime}, 
+			#{buyType}, 
+			#{buyPrice}, 
+			#{payments}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpUserHouseEntity">
+		update sp_user_house 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="propertySituation != null">`property_situation` = #{propertySituation}, </if>
+			<if test="houseAddress != null">`house_address` = #{houseAddress}, </if>
+			<if test="buyTime != null">`buy_time` = #{buyTime}, </if>
+			<if test="buyType != null">`buy_type` = #{buyType}, </if>
+			<if test="buyPrice != null">`buy_price` = #{buyPrice}, </if>
+			<if test="payments != null">`payments` = #{payments}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_user_house where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_user_house where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

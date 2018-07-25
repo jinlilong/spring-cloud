@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpCreditRereqDao">
+
+
+    <resultMap type="org.loan.core.domain.SpCreditRereqEntity" id="spCreditRereqMap">
+        <result property="id" column="id"/>
+        <result property="creditId" column="credit_id"/>
+        <result property="type" column="type"/>
+        <result property="addTime" column="add_time"/>
+        <result property="name" column="name"/>
+        <result property="url" column="url"/>
+        <result property="fileType" column="file_type"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		credit_id, 
+		type, 
+		add_time, 
+		name, 
+		url, 
+		file_type, 
+		update_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpCreditRereqEntity" resultMap="spCreditRereqMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_credit_rereq
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpCreditRereqEntity" resultMap="spCreditRereqMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_credit_rereq
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpCreditRereqEntity" resultMap="spCreditRereqMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_credit_rereq
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_credit_rereq
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpCreditRereqEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_credit_rereq
+		(
+			`credit_id`, 
+			`type`, 
+			`add_time`, 
+			`name`, 
+			`url`, 
+			`file_type`, 
+			`update_time`
+		)
+		values
+		(
+			#{creditId}, 
+			#{type}, 
+			#{addTime}, 
+			#{name}, 
+			#{url}, 
+			#{fileType}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpCreditRereqEntity">
+		update sp_credit_rereq 
+		<set>
+			<if test="creditId != null">`credit_id` = #{creditId}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="addTime != null">`add_time` = #{addTime}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="fileType != null">`file_type` = #{fileType}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_credit_rereq where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_credit_rereq where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

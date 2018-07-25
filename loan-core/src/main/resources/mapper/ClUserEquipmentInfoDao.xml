@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClUserEquipmentInfoDao">
+
+
+    <resultMap type="org.loan.core.domain.ClUserEquipmentInfoEntity" id="clUserEquipmentInfoMap">
+        <result property="id" column="id"/>
+        <result property="uuid" column="uuid"/>
+        <result property="userId" column="user_id"/>
+        <result property="operatingSystem" column="operating_system"/>
+        <result property="systemVersions" column="system_versions"/>
+        <result property="phoneName" column="phone_name"/>
+        <result property="phoneType" column="phone_type"/>
+        <result property="phoneBrand" column="phone_brand"/>
+        <result property="mobilecarrier" column="mobileCarrier"/>
+        <result property="phoneMark" column="phone_mark"/>
+        <result property="mac" column="mac"/>
+        <result property="screen" column="screen"/>
+        <result property="versionName" column="version_name"/>
+        <result property="versionCode" column="version_code"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		uuid, 
+		user_id, 
+		operating_system, 
+		system_versions, 
+		phone_name, 
+		phone_type, 
+		phone_brand, 
+		mobileCarrier, 
+		phone_mark, 
+		mac, 
+		screen, 
+		version_name, 
+		version_code
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClUserEquipmentInfoEntity" resultMap="clUserEquipmentInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_equipment_info
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClUserEquipmentInfoEntity" resultMap="clUserEquipmentInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_equipment_info
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClUserEquipmentInfoEntity" resultMap="clUserEquipmentInfoMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_equipment_info
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_user_equipment_info
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClUserEquipmentInfoEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_user_equipment_info
+		(
+			`uuid`, 
+			`user_id`, 
+			`operating_system`, 
+			`system_versions`, 
+			`phone_name`, 
+			`phone_type`, 
+			`phone_brand`, 
+			`mobileCarrier`, 
+			`phone_mark`, 
+			`mac`, 
+			`screen`, 
+			`version_name`, 
+			`version_code`
+		)
+		values
+		(
+			#{uuid}, 
+			#{userId}, 
+			#{operatingSystem}, 
+			#{systemVersions}, 
+			#{phoneName}, 
+			#{phoneType}, 
+			#{phoneBrand}, 
+			#{mobilecarrier}, 
+			#{phoneMark}, 
+			#{mac}, 
+			#{screen}, 
+			#{versionName}, 
+			#{versionCode}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClUserEquipmentInfoEntity">
+		update cl_user_equipment_info 
+		<set>
+			<if test="uuid != null">`uuid` = #{uuid}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="operatingSystem != null">`operating_system` = #{operatingSystem}, </if>
+			<if test="systemVersions != null">`system_versions` = #{systemVersions}, </if>
+			<if test="phoneName != null">`phone_name` = #{phoneName}, </if>
+			<if test="phoneType != null">`phone_type` = #{phoneType}, </if>
+			<if test="phoneBrand != null">`phone_brand` = #{phoneBrand}, </if>
+			<if test="mobilecarrier != null">`mobileCarrier` = #{mobilecarrier}, </if>
+			<if test="phoneMark != null">`phone_mark` = #{phoneMark}, </if>
+			<if test="mac != null">`mac` = #{mac}, </if>
+			<if test="screen != null">`screen` = #{screen}, </if>
+			<if test="versionName != null">`version_name` = #{versionName}, </if>
+			<if test="versionCode != null">`version_code` = #{versionCode}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_user_equipment_info where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_user_equipment_info where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpUserSpouseDao">
+
+
+    <resultMap type="org.loan.core.domain.SpUserSpouseEntity" id="spUserSpouseMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="credentialsType" column="credentials_type"/>
+        <result property="credentialsNumber" column="credentials_number"/>
+        <result property="education" column="education"/>
+        <result property="duties" column="duties"/>
+        <result property="politicalStatus" column="political_status"/>
+        <result property="phone" column="phone"/>
+        <result property="company" column="company"/>
+        <result property="revenue" column="revenue"/>
+        <result property="companyCharacter" column="company_character"/>
+        <result property="companyPhone" column="company_phone"/>
+        <result property="companyAdress" column="company_adress"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		name, 
+		credentials_type, 
+		credentials_number, 
+		education, 
+		duties, 
+		political_status, 
+		phone, 
+		company, 
+		revenue, 
+		company_character, 
+		company_phone, 
+		company_adress, 
+		create_time, 
+		update_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpUserSpouseEntity" resultMap="spUserSpouseMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_spouse
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpUserSpouseEntity" resultMap="spUserSpouseMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_spouse
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpUserSpouseEntity" resultMap="spUserSpouseMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_user_spouse
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_user_spouse
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpUserSpouseEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_user_spouse
+		(
+			`user_id`, 
+			`name`, 
+			`credentials_type`, 
+			`credentials_number`, 
+			`education`, 
+			`duties`, 
+			`political_status`, 
+			`phone`, 
+			`company`, 
+			`revenue`, 
+			`company_character`, 
+			`company_phone`, 
+			`company_adress`, 
+			`create_time`, 
+			`update_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{name}, 
+			#{credentialsType}, 
+			#{credentialsNumber}, 
+			#{education}, 
+			#{duties}, 
+			#{politicalStatus}, 
+			#{phone}, 
+			#{company}, 
+			#{revenue}, 
+			#{companyCharacter}, 
+			#{companyPhone}, 
+			#{companyAdress}, 
+			#{createTime}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpUserSpouseEntity">
+		update sp_user_spouse 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="credentialsType != null">`credentials_type` = #{credentialsType}, </if>
+			<if test="credentialsNumber != null">`credentials_number` = #{credentialsNumber}, </if>
+			<if test="education != null">`education` = #{education}, </if>
+			<if test="duties != null">`duties` = #{duties}, </if>
+			<if test="politicalStatus != null">`political_status` = #{politicalStatus}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="company != null">`company` = #{company}, </if>
+			<if test="revenue != null">`revenue` = #{revenue}, </if>
+			<if test="companyCharacter != null">`company_character` = #{companyCharacter}, </if>
+			<if test="companyPhone != null">`company_phone` = #{companyPhone}, </if>
+			<if test="companyAdress != null">`company_adress` = #{companyAdress}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_user_spouse where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_user_spouse where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<select id="querySpouseBySpUserId" resultType="org.loan.core.domain.SpUserSpouseEntity" resultMap="spUserSpouseMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_spouse
+		where user_id = #{spUserId}
+	</select>
+</mapper>

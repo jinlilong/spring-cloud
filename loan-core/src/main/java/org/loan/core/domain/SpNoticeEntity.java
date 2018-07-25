@@ -1,0 +1,208 @@
+package org.loan.core.domain;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 通知
+ * 
+ * @author hxy
+ * @email huangxianyuan@gmail.com
+ * @date 2018-03-30 09:21:37
+ */
+public class SpNoticeEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    //
+    private Long              id;
+    //通知内容
+    private String            context;
+    //通知标题
+    private String            title;
+    //通知来源 1=普通通知（人工发起） 2=流程通知
+    private String            soucre;
+    //通知状态 0=已发布 1=草稿 
+    private String            status;
+    //是否紧急 0是1否
+    private String            isUrgent;
+    //发布时间
+    private Date              releaseTimee;
+    //
+    private Date              createTime;
+    //
+    private Date              updateTime;
+    //
+    private String            createId;
+    //
+    private String            updateId;
+    //备用字段
+    private String            remark;
+
+    /**
+     * 设置：
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * 获取：
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * 设置：通知内容
+     */
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+    /**
+     * 获取：通知内容
+     */
+    public String getContext() {
+        return context;
+    }
+
+    /**
+     * 设置：通知标题
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * 获取：通知标题
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * 设置：通知来源 1=普通通知（人工发起） 2=流程通知
+     */
+    public void setSoucre(String soucre) {
+        this.soucre = soucre;
+    }
+
+    /**
+     * 获取：通知来源 1=普通通知（人工发起） 2=流程通知
+     */
+    public String getSoucre() {
+        return soucre;
+    }
+
+    /**
+     * 设置：通知状态 0=已发布 1=草稿 
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * 获取：通知状态 0=已发布 1=草稿 
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * 设置：是否紧急 0是1否
+     */
+    public void setIsUrgent(String isUrgent) {
+        this.isUrgent = isUrgent;
+    }
+
+    /**
+     * 获取：是否紧急 0是1否
+     */
+    public String getIsUrgent() {
+        return isUrgent;
+    }
+
+    /**
+     * 设置：发布时间
+     */
+    public void setReleaseTimee(Date releaseTimee) {
+        this.releaseTimee = releaseTimee;
+    }
+
+    /**
+     * 获取：发布时间
+     */
+    public Date getReleaseTimee() {
+        return releaseTimee;
+    }
+
+    /**
+     * 设置：
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * 获取：
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 设置：
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取：
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置：
+     */
+    public void setCreateId(String createId) {
+        this.createId = createId;
+    }
+
+    /**
+     * 获取：
+     */
+    public String getCreateId() {
+        return createId;
+    }
+
+    /**
+     * 设置：
+     */
+    public void setUpdateId(String updateId) {
+        this.updateId = updateId;
+    }
+
+    /**
+     * 获取：
+     */
+    public String getUpdateId() {
+        return updateId;
+    }
+
+    /**
+     * 设置：备用字段
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * 获取：备用字段
+     */
+    public String getRemark() {
+        return remark;
+    }
+}

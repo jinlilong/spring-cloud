@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpUserCreditinvestigationDao">
+
+
+    <resultMap type="org.loan.core.domain.SpUserCreditinvestigationEntity" id="spUserCreditinvestigationMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="creditNumber" column="credit_number"/>
+        <result property="inquiryTime" column="inquiry_time"/>
+        <result property="bankCreditNumber" column="bank_credit_number"/>
+        <result property="bankCreditRemainder" column="bank_credit_remainder"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		credit_number, 
+		inquiry_time, 
+		bank_credit_number, 
+		bank_credit_remainder, 
+		create_time, 
+		update_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpUserCreditinvestigationEntity" resultMap="spUserCreditinvestigationMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_creditinvestigation
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpUserCreditinvestigationEntity" resultMap="spUserCreditinvestigationMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_creditinvestigation
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpUserCreditinvestigationEntity" resultMap="spUserCreditinvestigationMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_user_creditinvestigation
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_user_creditinvestigation
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpUserCreditinvestigationEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_user_creditinvestigation
+		(
+			`user_id`, 
+			`credit_number`, 
+			`inquiry_time`, 
+			`bank_credit_number`, 
+			`bank_credit_remainder`, 
+			`create_time`, 
+			`update_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{creditNumber}, 
+			#{inquiryTime}, 
+			#{bankCreditNumber}, 
+			#{bankCreditRemainder}, 
+			#{createTime}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpUserCreditinvestigationEntity">
+		update sp_user_creditinvestigation 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="creditNumber != null">`credit_number` = #{creditNumber}, </if>
+			<if test="inquiryTime != null">`inquiry_time` = #{inquiryTime}, </if>
+			<if test="bankCreditNumber != null">`bank_credit_number` = #{bankCreditNumber}, </if>
+			<if test="bankCreditRemainder != null">`bank_credit_remainder` = #{bankCreditRemainder}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_user_creditinvestigation where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_user_creditinvestigation where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

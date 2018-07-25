@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpRoleMenuDao">
+
+
+    <resultMap type="org.loan.core.domain.SpRoleMenuEntity" id="spRoleMenuMap">
+        <result property="roleId" column="role_id"/>
+        <result property="menuId" column="menu_id"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		role_id, 
+		menu_id
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpRoleMenuEntity" resultMap="spRoleMenuMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_role_menu
+		where role_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpRoleMenuEntity" resultMap="spRoleMenuMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sys_role_menu
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by role_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpRoleMenuEntity" resultMap="spRoleMenuMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_sys_role_menu
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_sys_role_menu
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpRoleMenuEntity">
+		insert into sp_sys_role_menu
+		(
+			`role_id`, 
+			`menu_id`
+		)
+		values
+		(
+			#{roleId}, 
+			#{menuId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpRoleMenuEntity">
+		update sp_sys_role_menu 
+		<set>
+			<if test="menuId != null">`menu_id` = #{menuId}</if>
+		</set>
+		where role_id = #{roleId}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_sys_role_menu where role_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_sys_role_menu where role_id in 
+		<foreach item="roleId" collection="array" open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+	</delete>
+
+</mapper>

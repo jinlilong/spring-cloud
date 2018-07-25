@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ArcCreditDao">
+
+
+    <resultMap type="org.loan.core.domain.ArcCreditEntity" id="arcCreditMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="total" column="total"/>
+        <result property="creditType" column="credit_type"/>
+        <result property="grade" column="grade"/>
+        <result property="used" column="used"/>
+        <result property="unuse" column="unuse"/>
+        <result property="state" column="state"/>
+        <result property="reqExt" column="req_ext"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		total, 
+		credit_type, 
+		grade, 
+		used, 
+		unuse, 
+		state, 
+		req_ext
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ArcCreditEntity" resultMap="arcCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from arc_credit
+		where id = #{value}
+	</select>
+	
+	
+	<select id="queryCreditByUserId" resultType="org.loan.core.domain.ArcCreditEntity" resultMap="arcCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from arc_credit
+		where user_id=#{0}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ArcCreditEntity" resultMap="arcCreditMap">
+		select
+		<include refid="Base_Column_List" />
+		from arc_credit
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+
+	<update id="subtractQuota" parameterType="org.loan.core.domain.ArcCreditEntity">
+		update arc_credit set used=used+#{amount},unuse=unuse-#{amount} where user_id=#{userId}
+	</update>
+    
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ArcCreditEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into arc_credit
+		(
+			`user_id`, 
+			`total`, 
+			`credit_type`, 
+			`grade`, 
+			`used`, 
+			`unuse`, 
+			`state`, 
+			`req_ext`
+		)
+		values
+		(
+			#{userId}, 
+			#{total}, 
+			#{creditType}, 
+			#{grade}, 
+			#{used}, 
+			#{unuse}, 
+			#{state}, 
+			#{reqExt}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ArcCreditEntity">
+		update arc_credit 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="total != null">`total` = #{total}, </if>
+			<if test="creditType != null">`credit_type` = #{creditType}, </if>
+			<if test="grade != null">`grade` = #{grade}, </if>
+			<if test="used != null">`used` = #{used}, </if>
+			<if test="unuse != null">`unuse` = #{unuse}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="reqExt != null">`req_ext` = #{reqExt}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from arc_credit where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from arc_credit where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

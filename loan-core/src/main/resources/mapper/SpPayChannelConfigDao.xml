@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpPayChannelConfigDao">
+
+
+    <resultMap type="org.loan.core.domain.SpPayChannelConfigEntity" id="spPayChannelConfigMap">
+        <result property="id" column="id"/>
+        <result property="payChannel" column="pay_channel"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="bankCardType" column="bank_card_type"/>
+        <result property="bankCode" column="bank_code"/>
+        <result property="state" column="state"/>
+        <result property="jyMaxSingleLimit" column="jy_max_single_limit"/>
+        <result property="jyMaxDayLimit" column="jy_max_day_limit"/>
+        <result property="jyMaxMonthLimit" column="jy_max_month_limit"/>
+        <result property="dfSingleLimit" column="df_single_limit"/>
+        <result property="dfDayLimit" column="df_day_limit"/>
+        <result property="dfMonthLimit" column="df_month_limit"/>
+        <result property="dkSingleLimit" column="dk_single_limit"/>
+        <result property="dkDayLimit" column="dk_day_limit"/>
+        <result property="dkMonthLimit" column="dk_month_limit"/>
+        <result property="level" column="level"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createName" column="create_name"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="modifyName" column="modify_name"/>
+        <result property="supportSection" column="support_section"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="recommendState" column="recommend_state"/>
+        <result property="iconUrl" column="icon_url"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		pay_channel, 
+		bank_name, 
+		bank_card_type, 
+		bank_code, 
+		state, 
+		jy_max_single_limit, 
+		jy_max_day_limit, 
+		jy_max_month_limit, 
+		df_single_limit, 
+		df_day_limit, 
+		df_month_limit, 
+		dk_single_limit, 
+		dk_day_limit, 
+		dk_month_limit, 
+		level, 
+		create_time, 
+		create_name, 
+		modify_time, 
+		modify_name, 
+		support_section, 
+		channel_code,
+		recommend_state, 
+		icon_url
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpPayChannelConfigEntity" resultMap="spPayChannelConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_pay_channel_config
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpPayChannelConfigEntity" resultMap="spPayChannelConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_pay_channel_config
+		<where>
+			<if test="channel!=null and channel!=''">
+				and pay_channel=#{channel}
+			</if>
+			
+			and state='1'
+			
+		</where>
+		
+		order by recommend_state desc
+		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<!-- 根据银行code查询配置 查询优先级最高的支付通道-->
+	<select id="queryHighLevelByBankCode" resultType="org.loan.core.domain.SpPayChannelConfigEntity" resultMap="spPayChannelConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_pay_channel_config
+		where bank_code=#{0} and state='1' order by level desc limit 1
+	</select>
+	
+	
+	
+	<select id="queryDefaultChannel" resultType="org.loan.core.domain.SpPayChannelConfigEntity" resultMap="spPayChannelConfigMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_pay_channel_config
+		<where>
+			<if test="payChannel!=null and payChannel!=''">
+				and pay_channel=#{payChannel}
+			</if>
+			<if test="channelCode!=null and channelCode!=''">
+				and channel_code=#{channelCode}
+			</if>
+			<if test="bankCode!=null and bankCode!=''">
+				and bank_code=#{bankCode}
+			</if>
+		</where>
+		limit 1
+	</select>
+	
+	
+	
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpPayChannelConfigEntity">
+		insert into sp_pay_channel_config
+		(
+			`pay_channel`, 
+			`bank_name`, 
+			`bank_card_type`, 
+			`bank_code`, 
+			`state`, 
+			`jy_max_single_limit`, 
+			`jy_max_day_limit`, 
+			`jy_max_month_limit`, 
+			`df_single_limit`, 
+			`df_day_limit`, 
+			`df_month_limit`, 
+			`dk_single_limit`, 
+			`dk_day_limit`, 
+			`dk_month_limit`, 
+			`level`, 
+			`create_time`, 
+			`create_name`, 
+			`modify_time`, 
+			`modify_name`, 
+			`support_section`, 
+			`channel_code`,
+			`recommend_state`, 
+			`icon_url`
+		)
+		values
+		(
+			#{payChannel}, 
+			#{bankName}, 
+			#{bankCardType}, 
+			#{bankCode}, 
+			#{state}, 
+			#{jyMaxSingleLimit}, 
+			#{jyMaxDayLimit}, 
+			#{jyMaxMonthLimit}, 
+			#{dfSingleLimit}, 
+			#{dfDayLimit}, 
+			#{dfMonthLimit}, 
+			#{dkSingleLimit}, 
+			#{dkDayLimit}, 
+			#{dkMonthLimit}, 
+			#{level}, 
+			#{createTime}, 
+			#{createName}, 
+			#{modifyTime}, 
+			#{modifyName}, 
+			#{supportSection}, 
+			#{channelCode},
+			#{recommendState}, 
+			#{iconUrl}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpPayChannelConfigEntity">
+		update sp_pay_channel_config 
+		<set>
+			<if test="payChannel != null">`pay_channel` = #{payChannel}, </if>
+			<if test="bankName != null">`bank_name` = #{bankName}, </if>
+			<if test="bankCardType != null">`bank_card_type` = #{bankCardType}, </if>
+			<if test="bankCode != null">`bank_code` = #{bankCode}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="jyMaxSingleLimit != null">`jy_max_single_limit` = #{jyMaxSingleLimit}, </if>
+			<if test="jyMaxDayLimit != null">`jy_max_day_limit` = #{jyMaxDayLimit}, </if>
+			<if test="jyMaxMonthLimit != null">`jy_max_month_limit` = #{jyMaxMonthLimit}, </if>
+			<if test="dfSingleLimit != null">`df_single_limit` = #{dfSingleLimit}, </if>
+			<if test="dfDayLimit != null">`df_day_limit` = #{dfDayLimit}, </if>
+			<if test="dfMonthLimit != null">`df_month_limit` = #{dfMonthLimit}, </if>
+			<if test="dkSingleLimit != null">`dk_single_limit` = #{dkSingleLimit}, </if>
+			<if test="dkDayLimit != null">`dk_day_limit` = #{dkDayLimit}, </if>
+			<if test="dkMonthLimit != null">`dk_month_limit` = #{dkMonthLimit}, </if>
+			<if test="level != null">`level` = #{level}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="createName != null">`create_name` = #{createName}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="modifyName != null">`modify_name` = #{modifyName}, </if>
+			<if test="supportSection != null">`support_section` = #{supportSection}, </if>
+			<if test="channelCode != null">`channel_code` = #{channelCode},</if>
+			<if test="recommendState != null">`recommend_state` = #{recommendState}, </if>
+			<if test="iconUrl != null">`icon_url` = #{iconUrl}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_pay_channel_config where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_pay_channel_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

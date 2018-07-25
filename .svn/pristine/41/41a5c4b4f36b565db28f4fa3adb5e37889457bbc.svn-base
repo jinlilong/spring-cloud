@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClBorrowRepayLogDao">
+
+
+    <resultMap type="org.loan.core.domain.ClBorrowRepayLogEntity" id="clBorrowRepayLogMap">
+        <result property="id" column="id"/>
+        <result property="repayId" column="repay_id"/>
+        <result property="borrowId" column="borrow_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="amount" column="amount"/>
+        <result property="penaltyDay" column="penalty_day"/>
+        <result property="penaltyAmout" column="penalty_amout"/>
+        <result property="repayWay" column="repay_way"/>
+        <result property="repayAccount" column="repay_account"/>
+        <result property="serialNumber" column="serial_number"/>
+        <result property="refundDeduction" column="refund_deduction"/>
+        <result property="payTime" column="pay_time"/>
+        <result property="repayTime" column="repay_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		repay_id, 
+		borrow_id, 
+		user_id, 
+		amount, 
+		penalty_day, 
+		penalty_amout, 
+		repay_way, 
+		repay_account, 
+		serial_number, 
+		refund_deduction, 
+		pay_time, 
+		repay_time, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClBorrowRepayLogEntity" resultMap="clBorrowRepayLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay_log
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClBorrowRepayLogEntity" resultMap="clBorrowRepayLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_borrow_repay_log
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClBorrowRepayLogEntity" resultMap="clBorrowRepayLogMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_borrow_repay_log
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_borrow_repay_log
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClBorrowRepayLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_borrow_repay_log
+		(
+			`repay_id`, 
+			`borrow_id`, 
+			`user_id`, 
+			`amount`, 
+			`penalty_day`, 
+			`penalty_amout`, 
+			`repay_way`, 
+			`repay_account`, 
+			`serial_number`, 
+			`refund_deduction`, 
+			`pay_time`, 
+			`repay_time`, 
+			`create_time`
+		)
+		values
+		(
+			#{repayId}, 
+			#{borrowId}, 
+			#{userId}, 
+			#{amount}, 
+			#{penaltyDay}, 
+			#{penaltyAmout}, 
+			#{repayWay}, 
+			#{repayAccount}, 
+			#{serialNumber}, 
+			#{refundDeduction}, 
+			#{payTime}, 
+			#{repayTime}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClBorrowRepayLogEntity">
+		update cl_borrow_repay_log 
+		<set>
+			<if test="repayId != null">`repay_id` = #{repayId}, </if>
+			<if test="borrowId != null">`borrow_id` = #{borrowId}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
+			<if test="penaltyDay != null">`penalty_day` = #{penaltyDay}, </if>
+			<if test="penaltyAmout != null">`penalty_amout` = #{penaltyAmout}, </if>
+			<if test="repayWay != null">`repay_way` = #{repayWay}, </if>
+			<if test="repayAccount != null">`repay_account` = #{repayAccount}, </if>
+			<if test="serialNumber != null">`serial_number` = #{serialNumber}, </if>
+			<if test="refundDeduction != null">`refund_deduction` = #{refundDeduction}, </if>
+			<if test="payTime != null">`pay_time` = #{payTime}, </if>
+			<if test="repayTime != null">`repay_time` = #{repayTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_borrow_repay_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_borrow_repay_log where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

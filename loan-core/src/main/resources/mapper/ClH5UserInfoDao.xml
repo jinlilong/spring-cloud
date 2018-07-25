@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClH5UserInfoDao">
+
+
+    <resultMap type="org.loan.core.domain.ClH5UserInfoEntity" id="clH5UserInfoMap">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="userphone" column="userphone"/>
+        <result property="credit" column="credit"/>
+        <result property="moneyuse" column="moneyUse"/>
+        <result property="borrowtime" column="borrowTime"/>
+        <result property="url" column="url"/>
+        <result property="ip" column="ip"/>
+        <result property="city" column="city"/>
+        <result property="equipment" column="equipment"/>
+        <result property="inviter" column="Inviter"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		username, 
+		userphone, 
+		credit, 
+		moneyUse, 
+		borrowTime, 
+		url, 
+		ip, 
+		city, 
+		equipment, 
+		Inviter, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClH5UserInfoEntity" resultMap="clH5UserInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_h5_user_info
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClH5UserInfoEntity" resultMap="clH5UserInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_h5_user_info
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClH5UserInfoEntity" resultMap="clH5UserInfoMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_h5_user_info
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_h5_user_info
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClH5UserInfoEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_h5_user_info
+		(
+			`username`, 
+			`userphone`, 
+			`credit`, 
+			`moneyUse`, 
+			`borrowTime`, 
+			`url`, 
+			`ip`, 
+			`city`, 
+			`equipment`, 
+			`Inviter`, 
+			`create_time`
+		)
+		values
+		(
+			#{username}, 
+			#{userphone}, 
+			#{credit}, 
+			#{moneyuse}, 
+			#{borrowtime}, 
+			#{url}, 
+			#{ip}, 
+			#{city}, 
+			#{equipment}, 
+			#{inviter}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClH5UserInfoEntity">
+		update cl_h5_user_info 
+		<set>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="userphone != null">`userphone` = #{userphone}, </if>
+			<if test="credit != null">`credit` = #{credit}, </if>
+			<if test="moneyuse != null">`moneyUse` = #{moneyuse}, </if>
+			<if test="borrowtime != null">`borrowTime` = #{borrowtime}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="ip != null">`ip` = #{ip}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="equipment != null">`equipment` = #{equipment}, </if>
+			<if test="inviter != null">`Inviter` = #{inviter}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_h5_user_info where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_h5_user_info where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

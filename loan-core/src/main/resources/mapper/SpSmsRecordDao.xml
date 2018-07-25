@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpSmsRecordDao">
+
+
+    <resultMap type="org.loan.core.domain.SpSmsRecordEntity" id="spSmsRecordMap">
+        <result property="id" column="id"/>
+        <result property="smsTplId" column="sms_tpl_id"/>
+        <result property="counts" column="counts"/>
+        <result property="successCounts" column="success_counts"/>
+        <result property="createTime" column="create_time"/>
+        <result property="channelCode" column="channel_code"/>
+        <result property="percent" column="percent"/>
+        <result property="state" column="state"/>
+        <result property="taskId" column="task_id"/>
+        <result property="content" column="content"/>
+        <result property="successRate" column="success_rate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		sms_tpl_id, 
+		counts, 
+		success_counts, 
+		create_time, 
+		channel_code, 
+		percent, 
+		state, 
+		task_id, 
+		content, 
+		success_rate
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpSmsRecordEntity" resultMap="spSmsRecordMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sms_record
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpSmsRecordEntity" resultMap="spSmsRecordMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_sms_record
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpSmsRecordEntity" resultMap="spSmsRecordMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_sms_record
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_sms_record
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpSmsRecordEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_sms_record
+		(
+			`sms_tpl_id`, 
+			`counts`, 
+			`success_counts`, 
+			`create_time`, 
+			`channel_code`, 
+			`percent`, 
+			`state`, 
+			`task_id`, 
+			`content`, 
+			`success_rate`
+		)
+		values
+		(
+			#{smsTplId}, 
+			#{counts}, 
+			#{successCounts}, 
+			#{createTime}, 
+			#{channelCode}, 
+			#{percent}, 
+			#{state}, 
+			#{taskId}, 
+			#{content}, 
+			#{successRate}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpSmsRecordEntity">
+		update sp_sms_record 
+		<set>
+			<if test="smsTplId != null">`sms_tpl_id` = #{smsTplId}, </if>
+			<if test="counts != null">`counts` = #{counts}, </if>
+			<if test="successCounts != null">`success_counts` = #{successCounts}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="channelCode != null">`channel_code` = #{channelCode}, </if>
+			<if test="percent != null">`percent` = #{percent}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="taskId != null">`task_id` = #{taskId}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="successRate != null">`success_rate` = #{successRate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+	
+	
+	<delete id="delete">
+		delete from sp_sms_record where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_sms_record where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

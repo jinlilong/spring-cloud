@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClPayLogDao">
+
+
+    <resultMap type="org.loan.core.domain.ClPayLogEntity" id="clPayLogMap">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="mobile" column="mobile"/>
+        <result property="name" column="name"/>
+        <result property="repayId" column="repay_id"/>
+        <result property="borrowId" column="borrow_id"/>
+        <result property="amount" column="amount"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="bank" column="bank"/>
+        <result property="serialNumber" column="serial_number"/>
+        <result property="confirmCode" column="confirm_code"/>
+        <result property="source" column="source"/>
+        <result property="type" column="type"/>
+        <result property="scenes" column="scenes"/>
+        <result property="state" column="state"/>
+        <result property="remark" column="remark"/>
+        <result property="payReqTime" column="pay_req_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="payCode" column="pay_code"/>
+        <result property="advanceAmount" column="advance_amount"/>
+        <result property="repayInterest" column="repay_interest"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		order_no, 
+		user_id, 
+		mobile, 
+		name, 
+		repay_id, 
+		borrow_id, 
+		amount, 
+		card_no, 
+		bank, 
+		serial_number, 
+		confirm_code, 
+		source, 
+		type, 
+		scenes, 
+		state, 
+		remark, 
+		pay_req_time, 
+		update_time, 
+		create_time,
+		pay_code,
+		advance_amount,
+		repay_interest
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClPayLogEntity" resultMap="clPayLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_pay_log
+		where id = #{value}
+	</select>
+	
+	
+	
+	<select id="queryByOrderNo" resultType="org.loan.core.domain.ClPayLogEntity" resultMap="clPayLogMap" >
+		select
+		<include refid="Base_Column_List" />
+		from cl_pay_log
+		where order_no=#{0}
+	</select>
+	
+	
+	<select id="queryByRepayId" resultType="org.loan.core.domain.ClPayLogEntity" resultMap="clPayLogMap" >
+		select
+		<include refid="Base_Column_List" />
+		from cl_pay_log
+		where repay_id=#{0} and state='40'
+	</select>
+	
+	<select id="queryPendingPaymentPayLog" resultType="org.loan.core.domain.ClPayLogEntity" resultMap="clPayLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_pay_log
+		where create_time between #{startTime} and #{endTime} and scenes=#{scenes} and state='10'
+	</select>
+	
+	
+	<select id="queryUnRepayStateLog" resultType="org.loan.core.domain.ClPayLogEntity" resultMap="clPayLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_pay_log
+		<where>
+			<if test="borrowId!=null and borrowId>0">
+				and borrow_id=#{borrowId}
+			</if>
+			<if test="repay_id!=null and repay_id>0">
+				and repay_id=#{repayId}
+			</if>
+		</where>
+		limit 1
+	</select>
+	
+
+	<select id="queryList" resultType="org.loan.core.domain.ClPayLogEntity" resultMap="clPayLogMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_pay_log
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClPayLogEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_pay_log
+		(
+			`order_no`, 
+			`user_id`, 
+			`mobile`, 
+			`name`, 
+			`repay_id`, 
+			`borrow_id`, 
+			`amount`, 
+			`card_no`, 
+			`bank`, 
+			`serial_number`, 
+			`confirm_code`, 
+			`source`, 
+			`type`, 
+			`scenes`, 
+			`state`, 
+			`remark`, 
+			`pay_req_time`, 
+			`update_time`, 
+			`create_time`,
+			`pay_code`,
+			`advance_amount`,
+			`repay_interest`
+		)
+		values
+		(
+			#{orderNo}, 
+			#{userId}, 
+			#{mobile}, 
+			#{name}, 
+			#{repayId}, 
+			#{borrowId}, 
+			#{amount}, 
+			#{cardNo}, 
+			#{bank}, 
+			#{serialNumber}, 
+			#{confirmCode}, 
+			#{source}, 
+			#{type}, 
+			#{scenes}, 
+			#{state}, 
+			#{remark}, 
+			#{payReqTime}, 
+			#{updateTime}, 
+			#{createTime},
+			#{payCode},
+			#{advanceAmount},
+			#{repayInterest}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClPayLogEntity">
+		update cl_pay_log 
+		<set>
+			<if test="orderNo != null">`order_no` = #{orderNo}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="repayId != null">`repay_id` = #{repayId}, </if>
+			<if test="borrowId != null">`borrow_id` = #{borrowId}, </if>
+			<if test="amount != null">`amount` = #{amount}, </if>
+			<if test="cardNo != null">`card_no` = #{cardNo}, </if>
+			<if test="bank != null">`bank` = #{bank}, </if>
+			<if test="serialNumber != null">`serial_number` = #{serialNumber}, </if>
+			<if test="confirmCode != null">`confirm_code` = #{confirmCode}, </if>
+			<if test="source != null">`source` = #{source}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="scenes != null">`scenes` = #{scenes}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="payReqTime != null">`pay_req_time` = #{payReqTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime},</if>
+			<if test="advanceAmount != null">`advance_amount` = #{advanceAmount},</if>
+			<if test="repayInterest != null">`repay_interest` = #{repayInterest},</if>
+			<if test="payCode != null">`pay_code` = #{payCode}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_pay_log where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_pay_log where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

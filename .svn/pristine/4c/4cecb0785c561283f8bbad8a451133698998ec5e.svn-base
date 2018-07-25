@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.QrtzTriggersDao">
+
+
+    <resultMap type="org.loan.core.domain.QrtzTriggersEntity" id="qrtzTriggersMap">
+        <result property="schedName" column="SCHED_NAME"/>
+        <result property="triggerName" column="TRIGGER_NAME"/>
+        <result property="triggerGroup" column="TRIGGER_GROUP"/>
+        <result property="jobName" column="JOB_NAME"/>
+        <result property="jobGroup" column="JOB_GROUP"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="nextFireTime" column="NEXT_FIRE_TIME"/>
+        <result property="prevFireTime" column="PREV_FIRE_TIME"/>
+        <result property="priority" column="PRIORITY"/>
+        <result property="triggerState" column="TRIGGER_STATE"/>
+        <result property="triggerType" column="TRIGGER_TYPE"/>
+        <result property="startTime" column="START_TIME"/>
+        <result property="endTime" column="END_TIME"/>
+        <result property="calendarName" column="CALENDAR_NAME"/>
+        <result property="misfireInstr" column="MISFIRE_INSTR"/>
+        <result property="jobData" column="JOB_DATA"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		SCHED_NAME, 
+		TRIGGER_NAME, 
+		TRIGGER_GROUP, 
+		JOB_NAME, 
+		JOB_GROUP, 
+		DESCRIPTION, 
+		NEXT_FIRE_TIME, 
+		PREV_FIRE_TIME, 
+		PRIORITY, 
+		TRIGGER_STATE, 
+		TRIGGER_TYPE, 
+		START_TIME, 
+		END_TIME, 
+		CALENDAR_NAME, 
+		MISFIRE_INSTR, 
+		JOB_DATA
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.QrtzTriggersEntity" resultMap="qrtzTriggersMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_triggers
+		where SCHED_NAME = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.QrtzTriggersEntity" resultMap="qrtzTriggersMap">
+		select
+		<include refid="Base_Column_List" />
+		from qrtz_triggers
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by SCHED_NAME desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.QrtzTriggersEntity" resultMap="qrtzTriggersMap">
+        select
+        <include refid="Base_Column_List" />
+        from qrtz_triggers
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from qrtz_triggers
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.QrtzTriggersEntity">
+		insert into qrtz_triggers
+		(
+			`SCHED_NAME`, 
+			`TRIGGER_NAME`, 
+			`TRIGGER_GROUP`, 
+			`JOB_NAME`, 
+			`JOB_GROUP`, 
+			`DESCRIPTION`, 
+			`NEXT_FIRE_TIME`, 
+			`PREV_FIRE_TIME`, 
+			`PRIORITY`, 
+			`TRIGGER_STATE`, 
+			`TRIGGER_TYPE`, 
+			`START_TIME`, 
+			`END_TIME`, 
+			`CALENDAR_NAME`, 
+			`MISFIRE_INSTR`, 
+			`JOB_DATA`
+		)
+		values
+		(
+			#{schedName}, 
+			#{triggerName}, 
+			#{triggerGroup}, 
+			#{jobName}, 
+			#{jobGroup}, 
+			#{description}, 
+			#{nextFireTime}, 
+			#{prevFireTime}, 
+			#{priority}, 
+			#{triggerState}, 
+			#{triggerType}, 
+			#{startTime}, 
+			#{endTime}, 
+			#{calendarName}, 
+			#{misfireInstr}, 
+			#{jobData}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.QrtzTriggersEntity">
+		update qrtz_triggers 
+		<set>
+			<if test="triggerName != null">`TRIGGER_NAME` = #{triggerName}, </if>
+			<if test="triggerGroup != null">`TRIGGER_GROUP` = #{triggerGroup}, </if>
+			<if test="jobName != null">`JOB_NAME` = #{jobName}, </if>
+			<if test="jobGroup != null">`JOB_GROUP` = #{jobGroup}, </if>
+			<if test="description != null">`DESCRIPTION` = #{description}, </if>
+			<if test="nextFireTime != null">`NEXT_FIRE_TIME` = #{nextFireTime}, </if>
+			<if test="prevFireTime != null">`PREV_FIRE_TIME` = #{prevFireTime}, </if>
+			<if test="priority != null">`PRIORITY` = #{priority}, </if>
+			<if test="triggerState != null">`TRIGGER_STATE` = #{triggerState}, </if>
+			<if test="triggerType != null">`TRIGGER_TYPE` = #{triggerType}, </if>
+			<if test="startTime != null">`START_TIME` = #{startTime}, </if>
+			<if test="endTime != null">`END_TIME` = #{endTime}, </if>
+			<if test="calendarName != null">`CALENDAR_NAME` = #{calendarName}, </if>
+			<if test="misfireInstr != null">`MISFIRE_INSTR` = #{misfireInstr}, </if>
+			<if test="jobData != null">`JOB_DATA` = #{jobData}</if>
+		</set>
+		where SCHED_NAME = #{schedName}
+	</update>
+	
+	<delete id="delete">
+		delete from qrtz_triggers where SCHED_NAME = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from qrtz_triggers where SCHED_NAME in 
+		<foreach item="schedName" collection="array" open="(" separator="," close=")">
+			#{schedName}
+		</foreach>
+	</delete>
+
+</mapper>

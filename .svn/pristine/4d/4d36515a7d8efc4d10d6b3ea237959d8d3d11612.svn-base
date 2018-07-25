@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpUserEducationDao">
+
+
+    <resultMap type="org.loan.core.domain.SpUserEducationEntity" id="spUserEducationMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="stopTime" column="stop_time"/>
+        <result property="school" column="school"/>
+        <result property="education" column="education"/>
+        <result property="reward" column="reward"/>
+        <result property="remarks" column="remarks"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		start_time, 
+		stop_time, 
+		school, 
+		education, 
+		reward, 
+		remarks, 
+		create_time, 
+		update_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpUserEducationEntity" resultMap="spUserEducationMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_education
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpUserEducationEntity" resultMap="spUserEducationMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_user_education
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpUserEducationEntity" resultMap="spUserEducationMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_user_education
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_user_education
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpUserEducationEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_user_education
+		(
+			`user_id`, 
+			`start_time`, 
+			`stop_time`, 
+			`school`, 
+			`education`, 
+			`reward`, 
+			`remarks`, 
+			`create_time`, 
+			`update_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{startTime}, 
+			#{stopTime}, 
+			#{school}, 
+			#{education}, 
+			#{reward}, 
+			#{remarks}, 
+			#{createTime}, 
+			#{updateTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpUserEducationEntity">
+		update sp_user_education 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="stopTime != null">`stop_time` = #{stopTime}, </if>
+			<if test="school != null">`school` = #{school}, </if>
+			<if test="education != null">`education` = #{education}, </if>
+			<if test="reward != null">`reward` = #{reward}, </if>
+			<if test="remarks != null">`remarks` = #{remarks}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_user_education where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_user_education where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClChannelAppDao">
+
+
+    <resultMap type="org.loan.core.domain.ClChannelAppEntity" id="clChannelAppMap">
+        <result property="id" column="id"/>
+        <result property="channelId" column="channel_id"/>
+        <result property="appType" column="app_type"/>
+        <result property="latestVersion" column="latest_version"/>
+        <result property="minVersion" column="min_version"/>
+        <result property="downloadUrl" column="download_url"/>
+        <result property="state" column="state"/>
+        <result property="isForceUpdate" column="is_force_update"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		channel_id, 
+		app_type, 
+		latest_version, 
+		min_version, 
+		download_url, 
+		state, 
+		is_force_update
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClChannelAppEntity" resultMap="clChannelAppMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_channel_app
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClChannelAppEntity" resultMap="clChannelAppMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_channel_app
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClChannelAppEntity" resultMap="clChannelAppMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_channel_app
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_channel_app
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClChannelAppEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_channel_app
+		(
+			`channel_id`, 
+			`app_type`, 
+			`latest_version`, 
+			`min_version`, 
+			`download_url`, 
+			`state`, 
+			`is_force_update`
+		)
+		values
+		(
+			#{channelId}, 
+			#{appType}, 
+			#{latestVersion}, 
+			#{minVersion}, 
+			#{downloadUrl}, 
+			#{state}, 
+			#{isForceUpdate}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClChannelAppEntity">
+		update cl_channel_app 
+		<set>
+			<if test="channelId != null">`channel_id` = #{channelId}, </if>
+			<if test="appType != null">`app_type` = #{appType}, </if>
+			<if test="latestVersion != null">`latest_version` = #{latestVersion}, </if>
+			<if test="minVersion != null">`min_version` = #{minVersion}, </if>
+			<if test="downloadUrl != null">`download_url` = #{downloadUrl}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="isForceUpdate != null">`is_force_update` = #{isForceUpdate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_channel_app where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_channel_app where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

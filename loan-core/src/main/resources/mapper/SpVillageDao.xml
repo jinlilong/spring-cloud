@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpVillageDao">
+
+
+    <resultMap type="org.loan.core.domain.SpVillageEntity" id="spVillageMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="area" column="area"/>
+        <result property="city" column="city"/>
+        <result property="county" column="county"/>
+        <result property="totalHouseholds" column="total_households"/>
+        <result property="housePrices" column="house_prices"/>
+        <result property="parkingNum" column="parking_num"/>
+        <result property="deliverTime" column="deliver_time"/>
+        <result property="isCredentials" column="is_credentials"/>
+        <result property="rate" column="rate"/>
+        <result property="lowerParkingPrice" column="lower_parking_price"/>
+        <result property="highestParkingPrice" column="highest_parking_price"/>
+        <result property="developerName" column="developer_name"/>
+        <result property="propertyName" column="property_name"/>
+        <result property="remark" column="remark"/>
+        <result property="organCode" column="organ_code"/>
+        <result property="type" column="type"/>
+        <result property="blackRemark" column="black_remark"/>
+        <result property="isBlack" column="is_black"/>
+        <result property="isUsed" column="is_used"/>
+        <result property="isCaution" column="is_caution"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="addId" column="add_id"/>
+        <result property="addName" column="add_name"/>
+        <result property="title" column="title"/>
+        <result property="editState" column="edit_state"/>
+        <result property="areaName" column="area_name"/>
+        <result property="cityName" column="city_name"/>
+        <result property="countyName" column="county_name"/>
+        <result property="areaCode" column="area_code"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		name, 
+		area, 
+		city, 
+		county, 
+		total_households, 
+		house_prices, 
+		parking_num, 
+		deliver_time, 
+		is_credentials, 
+		rate, 
+		lower_parking_price, 
+		highest_parking_price, 
+		developer_name, 
+		property_name, 
+		remark, 
+		organ_code, 
+		type, 
+		black_remark, 
+		is_black, 
+		is_used, 
+		is_caution, 
+		is_delete, 
+		create_time, 
+		update_time, 
+		status, 
+		add_id, 
+		add_name, 
+		title, 
+		edit_state, 
+		area_name, 
+		city_name, 
+		county_name, 
+		area_code
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpVillageEntity" resultMap="spVillageMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_village
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpVillageEntity" resultMap="spVillageMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_village
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpVillageEntity" resultMap="spVillageMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_village
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_village
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpVillageEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_village
+		(
+			`name`, 
+			`area`, 
+			`city`, 
+			`county`, 
+			`total_households`, 
+			`house_prices`, 
+			`parking_num`, 
+			`deliver_time`, 
+			`is_credentials`, 
+			`rate`, 
+			`lower_parking_price`, 
+			`highest_parking_price`, 
+			`developer_name`, 
+			`property_name`, 
+			`remark`, 
+			`organ_code`, 
+			`type`, 
+			`black_remark`, 
+			`is_black`, 
+			`is_used`, 
+			`is_caution`, 
+			`is_delete`, 
+			`create_time`, 
+			`update_time`, 
+			`status`, 
+			`add_id`, 
+			`add_name`, 
+			`title`, 
+			`edit_state`, 
+			`area_name`, 
+			`city_name`, 
+			`county_name`, 
+			`area_code`
+		)
+		values
+		(
+			#{name}, 
+			#{area}, 
+			#{city}, 
+			#{county}, 
+			#{totalHouseholds}, 
+			#{housePrices}, 
+			#{parkingNum}, 
+			#{deliverTime}, 
+			#{isCredentials}, 
+			#{rate}, 
+			#{lowerParkingPrice}, 
+			#{highestParkingPrice}, 
+			#{developerName}, 
+			#{propertyName}, 
+			#{remark}, 
+			#{organCode}, 
+			#{type}, 
+			#{blackRemark}, 
+			#{isBlack}, 
+			#{isUsed}, 
+			#{isCaution}, 
+			#{isDelete}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{status}, 
+			#{addId}, 
+			#{addName}, 
+			#{title}, 
+			#{editState}, 
+			#{areaName}, 
+			#{cityName}, 
+			#{countyName}, 
+			#{areaCode}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpVillageEntity">
+		update sp_village 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="area != null">`area` = #{area}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="county != null">`county` = #{county}, </if>
+			<if test="totalHouseholds != null">`total_households` = #{totalHouseholds}, </if>
+			<if test="housePrices != null">`house_prices` = #{housePrices}, </if>
+			<if test="parkingNum != null">`parking_num` = #{parkingNum}, </if>
+			<if test="deliverTime != null">`deliver_time` = #{deliverTime}, </if>
+			<if test="isCredentials != null">`is_credentials` = #{isCredentials}, </if>
+			<if test="rate != null">`rate` = #{rate}, </if>
+			<if test="lowerParkingPrice != null">`lower_parking_price` = #{lowerParkingPrice}, </if>
+			<if test="highestParkingPrice != null">`highest_parking_price` = #{highestParkingPrice}, </if>
+			<if test="developerName != null">`developer_name` = #{developerName}, </if>
+			<if test="propertyName != null">`property_name` = #{propertyName}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="organCode != null">`organ_code` = #{organCode}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="blackRemark != null">`black_remark` = #{blackRemark}, </if>
+			<if test="isBlack != null">`is_black` = #{isBlack}, </if>
+			<if test="isUsed != null">`is_used` = #{isUsed}, </if>
+			<if test="isCaution != null">`is_caution` = #{isCaution}, </if>
+			<if test="isDelete != null">`is_delete` = #{isDelete}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="addId != null">`add_id` = #{addId}, </if>
+			<if test="addName != null">`add_name` = #{addName}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="editState != null">`edit_state` = #{editState}, </if>
+			<if test="areaName != null">`area_name` = #{areaName}, </if>
+			<if test="cityName != null">`city_name` = #{cityName}, </if>
+			<if test="countyName != null">`county_name` = #{countyName}, </if>
+			<if test="areaCode != null">`area_code` = #{areaCode}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sp_village where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_village where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

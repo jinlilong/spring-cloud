@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.ClUserAuthDataDao">
+
+
+    <resultMap type="org.loan.core.domain.ClUserAuthDataEntity" id="clUserAuthDataMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="phoneReport" column="phone_report"/>
+        <result property="phoneData" column="phone_data"/>
+        <result property="zhengxinReport" column="zhengxin_report"/>
+        <result property="zhengxinData" column="zhengxin_data"/>
+        <result property="created" column="created"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		user_id, 
+		phone_report, 
+		phone_data, 
+		zhengxin_report, 
+		zhengxin_data, 
+		created
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.ClUserAuthDataEntity" resultMap="clUserAuthDataMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_auth_data
+		where id = #{value}
+	</select>
+
+	<select id="queryAuthDataByUserId" resultType="org.loan.core.domain.ClUserAuthDataEntity" resultMap="clUserAuthDataMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_auth_data
+		where user_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.ClUserAuthDataEntity" resultMap="clUserAuthDataMap">
+		select
+		<include refid="Base_Column_List" />
+		from cl_user_auth_data
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.ClUserAuthDataEntity" resultMap="clUserAuthDataMap">
+        select
+        <include refid="Base_Column_List" />
+        from cl_user_auth_data
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cl_user_auth_data
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.ClUserAuthDataEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into cl_user_auth_data
+		(
+			`user_id`, 
+			`phone_report`, 
+			`phone_data`, 
+			`zhengxin_report`, 
+			`zhengxin_data`, 
+			`created`
+		)
+		values
+		(
+			#{userId}, 
+			#{phoneReport}, 
+			#{phoneData}, 
+			#{zhengxinReport}, 
+			#{zhengxinData}, 
+			#{created}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.ClUserAuthDataEntity">
+		update cl_user_auth_data 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="phoneReport != null">`phone_report` = #{phoneReport}, </if>
+			<if test="phoneData != null">`phone_data` = #{phoneData}, </if>
+			<if test="zhengxinReport != null">`zhengxin_report` = #{zhengxinReport}, </if>
+			<if test="zhengxinData != null">`zhengxin_data` = #{zhengxinData}, </if>
+			<if test="created != null">`created` = #{created}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cl_user_auth_data where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cl_user_auth_data where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

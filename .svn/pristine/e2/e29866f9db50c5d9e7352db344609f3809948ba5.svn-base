@@ -1,0 +1,272 @@
+package org.loan.core.domain;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 管理员表
+ * 
+ * @author hxy
+ * @email huangxianyuan@gmail.com
+ * @date 2018-03-30 09:21:26
+ */
+public class UserEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    //主键id
+    private Integer           id;
+    //头像
+    private String            avatar;
+    //账号
+    private String            account;
+    //密码
+    private String            password;
+    //md5密码盐
+    private String            salt;
+    //名字
+    private String            name;
+    //生日
+    private Date              birthday;
+    //性别（1：男 2：女）
+    private Integer           sex;
+    //电子邮件
+    private String            email;
+    //电话
+    private String            phone;
+    //角色id
+    private String            roleid;
+    //部门id
+    private Integer           deptid;
+    //状态(1：启用  2：冻结  3：删除）
+    private Integer           status;
+    //创建时间
+    private Date              createtime;
+    //保留字段
+    private Integer           version;
+    //
+    private String            rolename;
+
+    /**
+     * 设置：主键id
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * 获取：主键id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * 设置：头像
+     */
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    /**
+     * 获取：头像
+     */
+    public String getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * 设置：账号
+     */
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    /**
+     * 获取：账号
+     */
+    public String getAccount() {
+        return account;
+    }
+
+    /**
+     * 设置：密码
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * 获取：密码
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * 设置：md5密码盐
+     */
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    /**
+     * 获取：md5密码盐
+     */
+    public String getSalt() {
+        return salt;
+    }
+
+    /**
+     * 设置：名字
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * 获取：名字
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * 设置：生日
+     */
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    /**
+     * 获取：生日
+     */
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * 设置：性别（1：男 2：女）
+     */
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    /**
+     * 获取：性别（1：男 2：女）
+     */
+    public Integer getSex() {
+        return sex;
+    }
+
+    /**
+     * 设置：电子邮件
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * 获取：电子邮件
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * 设置：电话
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * 获取：电话
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * 设置：角色id
+     */
+    public void setRoleid(String roleid) {
+        this.roleid = roleid;
+    }
+
+    /**
+     * 获取：角色id
+     */
+    public String getRoleid() {
+        return roleid;
+    }
+
+    /**
+     * 设置：部门id
+     */
+    public void setDeptid(Integer deptid) {
+        this.deptid = deptid;
+    }
+
+    /**
+     * 获取：部门id
+     */
+    public Integer getDeptid() {
+        return deptid;
+    }
+
+    /**
+     * 设置：状态(1：启用  2：冻结  3：删除）
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    /**
+     * 获取：状态(1：启用  2：冻结  3：删除）
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * 设置：创建时间
+     */
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    /**
+     * 获取：创建时间
+     */
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    /**
+     * 设置：保留字段
+     */
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    /**
+     * 获取：保留字段
+     */
+    public Integer getVersion() {
+        return version;
+    }
+
+    /**
+     * 设置：
+     */
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
+    }
+
+    /**
+     * 获取：
+     */
+    public String getRolename() {
+        return rolename;
+    }
+}

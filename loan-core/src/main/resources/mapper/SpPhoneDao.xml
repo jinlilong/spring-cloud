@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.loan.core.dao.SpPhoneDao">
+
+
+    <resultMap type="org.loan.core.domain.SpPhoneEntity" id="spPhoneMap">
+        <result property="id" column="id"/>
+        <result property="phone" column="phone"/>
+        <result property="type" column="type"/>
+        <result property="msgTotal" column="msg_total"/>
+        <result property="msgSuccess" column="msg_success"/>
+        <result property="msgFail" column="msg_fail"/>
+        <result property="lastSendTime" column="last_send_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+		id, 
+		phone, 
+		type, 
+		msg_total, 
+		msg_success, 
+		msg_fail, 
+		last_send_time, 
+		create_time
+    </sql>
+
+	<select id="queryObject" resultType="org.loan.core.domain.SpPhoneEntity" resultMap="spPhoneMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_phone
+		where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="org.loan.core.domain.SpPhoneEntity" resultMap="spPhoneMap">
+		select
+		<include refid="Base_Column_List" />
+		from sp_phone
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="queryListByBean" resultType="org.loan.core.domain.SpPhoneEntity" resultMap="spPhoneMap">
+        select
+        <include refid="Base_Column_List" />
+        from sp_phone
+        WHERE 1=1
+    </select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sp_phone
+	</select>
+	 
+	<insert id="save" parameterType="org.loan.core.domain.SpPhoneEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_phone
+		(
+			`phone`, 
+			`type`, 
+			`msg_total`, 
+			`msg_success`, 
+			`msg_fail`, 
+			`last_send_time`, 
+			`create_time`
+		)
+		values
+		(
+			#{phone}, 
+			#{type}, 
+			#{msgTotal}, 
+			#{msgSuccess}, 
+			#{msgFail}, 
+			#{lastSendTime}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="org.loan.core.domain.SpPhoneEntity">
+		update sp_phone 
+		<set>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="msgTotal != null">`msg_total` = #{msgTotal}, </if>
+			<if test="msgSuccess != null">`msg_success` = #{msgSuccess}, </if>
+			<if test="msgFail != null">`msg_fail` = #{msgFail}, </if>
+			<if test="lastSendTime != null">`last_send_time` = #{lastSendTime}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+	<update id="updateSpPhoneSuccess" parameterType="org.loan.core.domain.SpPhoneEntity">
+		update sp_phone set msg_total=msg_total+1,msg_success=msg_success+1,last_send_time=now() where phone=#{0}
+	</update>
+	
+	
+	<update id="updateSpPhoneFail" parameterType="org.loan.core.domain.SpPhoneEntity">
+		update sp_phone set msg_total=msg_total+1,msg_fail=msg_fail+1 where phone=#{0}
+	</update>
+	
+	
+	<delete id="delete">
+		delete from sp_phone where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sp_phone where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	
+	<select id="queryByPhone" resultType="org.loan.core.domain.SpPhoneEntity" resultMap="spPhoneMap">
+		select
+        <include refid="Base_Column_List" />
+        from sp_phone
+        where phone=#{0}
+	</select>
+
+</mapper>
